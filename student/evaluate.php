@@ -52,18 +52,18 @@ $restriction = $conn->query("
     .card-info.card-outline {
         border-top: 3px solid #9b0a1e !important;
     }
-
+    
     .border-info {
         border-color: #dc143c !important;
         margin-bottom: 20px;
         margin-top: 20px;
     }
 
+    
     .bg-gradient-secondary {
-        background: #007bff !important;
-        color: #fff;
-    }
-
+    background: #9b0a1e !important;
+    color: #fff;
+}
     .evaluated {
         color: white; 
         cursor: not-allowed; 
