@@ -48,7 +48,8 @@ function ordinal_suffix($num) {
                     CONCAT(cl.level, ' - ', cl.section) AS class_details,
                     cl.curriculum,
                     r.faculty_id,
-                    f.avatar
+                    f.avatar,
+                    f.lastname -- Include this column for ORDER BY compatibility
                 FROM evaluation_list r
                 LEFT JOIN subject_list sl ON r.subject_id = sl.id
                 LEFT JOIN faculty_list f ON r.faculty_id = f.id
