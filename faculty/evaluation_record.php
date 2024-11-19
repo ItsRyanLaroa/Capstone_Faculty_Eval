@@ -46,9 +46,9 @@ $evaluations = $conn->query("
         <div class="card-header">
             <h3 class="text-center" style="font-weight: bold; color: #dc143c;">Student Who Evaluated</h3>
             <div class="input-group mb-3" style="max-width: 20%; margin-left: auto;">
-                <input type="text" class="form-control" id="search-input" placeholder="Search..." aria-label="Search">
+               
                 <div class="input-group-append">
-                    <span class="input-group-text"><i class="fa fa-search"></i></span>
+                   
                 </div>
             </div>
         </div>
@@ -76,15 +76,6 @@ $evaluations = $conn->query("
                 </tbody>
             </table>
 
-            <div class="mb-3" style="width: 100px; margin-left: auto; float: left;">
-                <select id="rows-per-page" class="form-control">
-                    <option value="5">5 rows</option>
-                    <option value="10">10 rows</option>
-                    <option value="15">15 rows</option>
-                    <option value="20">20 rows</option>
-                </select>
-            </div>
-            <div id="pagination-controls" class="mt-3 d-flex justify-content-end"></div>
         </div>
     </div>
 </div>
