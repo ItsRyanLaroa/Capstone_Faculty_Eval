@@ -133,22 +133,38 @@ if ($row) {
   </div>
 </div>
 
-  <div class="col-12 col-sm-6 col-md-4">
+<div class="col-12 col-sm-6 col-md-4">
     <div class="small-box bg-light shadow-sm border">
-      <div class="inner">
-        <h3>
-          <?php 
-            $faculty_count_query = "SELECT COUNT(*) AS total_faculty FROM faculty_list"; // Replace 'faculty_list' with your actual faculty table name
-            $result = $conn->query($faculty_count_query);
-            $row = $result->fetch_assoc();
-            echo $row['total_faculty']; 
-          ?>
-        </h3>
-        <p>Total Faculty Members</p>
-      </div>
-      <div class="icon">
-        <i class="fa fa-user-friends"></i> <!-- Change icon as needed -->
-      </div>
+        <div class="inner">
+            <h3>
+                <?php
+                // Ensure $class_id is available
+                if (!empty($class_id)) {
+                    // Query to count faculty assigned to the same class as the logged-in student
+                    $faculty_by_class_query = "
+                        SELECT COUNT(DISTINCT faculty_list.id) AS total_faculty
+                        FROM faculty_list
+                        INNER JOIN subject_teacher 
+                        ON faculty_list.id = subject_teacher.faculty_id
+                        WHERE subject_teacher.faculty_id = ?";
+                    
+                    $stmt = $conn->prepare($faculty_by_class_query);
+                    $stmt->bind_param("i", $class_id);
+                    $stmt->execute();
+                    $result = $stmt->get_result();
+                    $row = $result->fetch_assoc();
+                    
+                    echo $row['total_faculty']; // Total faculty for the same class
+                } else {
+                    echo 0; // If no class_id is found
+                }
+                ?>
+            </h3>
+            <p>Total Faculty for Your Class</p>
+        </div>
+        <div class="icon">
+            <i class="fa fa-user-friends"></i> <!-- Icon for faculty -->
+        </div>
     </div>
-  </div>
 </div>
+
