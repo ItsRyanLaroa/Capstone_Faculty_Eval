@@ -1,6 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<?php session_start() ?>
 <?php 
 	if(!isset($_SESSION['login_id']))
 	    header('location:homepage.php');
@@ -17,6 +14,11 @@
 
 	include 'header.php' 
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
+<?php session_start() ?>
+
 <style>
   .border-primary{
     border-color: #dc143c !important; 
