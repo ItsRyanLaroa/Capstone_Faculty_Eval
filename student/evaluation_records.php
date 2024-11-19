@@ -19,7 +19,7 @@ function ordinal_suffix($num) {
         <span style="color: #dc143c"><h3 class="text-center" style="font-weight: bold;">List of teachers you've evaluated</h3></span>
 
         <!-- Search Bar -->
-        <div class="input-group mb-3" style="max-width: 20%; margin-left: auto;">
+        <div class="input-group mb-3" style="max-width: 50%; margin-left: auto;">
             <input type="text" class="form-control" id="search-input" placeholder="Search..." aria-label="Search">
             <div class="input-group-append">
                 <span class="input-group-text"><i class="fa fa-search"></i></span>
@@ -29,6 +29,7 @@ function ordinal_suffix($num) {
         <table class="table table-striped table-hover">
             <thead class="bg-gradient-secondary text-white">
                 <tr>
+           
                     <th>Faculty Name</th>
                     <th>Subject</th>
                     <th>Academic Year</th>
@@ -36,32 +37,31 @@ function ordinal_suffix($num) {
                 </tr>
             </thead>
             <tbody id="evaluation-table-body">
-                <?php 
+            <?php 
                 $student_id = $_SESSION['login_id'];
                 $academic_id = $_SESSION['academic']['id'];
 
-              $evaluations = $conn->query("SELECT 
-                CONCAT(f.lastname, ', ', f.firstname) AS faculty_name,
-                sl.subject,
-                a.year AS academic_year,
-                CONCAT(cl.level, ' - ', cl.section) AS class_details,
-                cl.curriculum,
-                r.faculty_id,
-                f.avatar
-            FROM evaluation_list r
-            LEFT JOIN subject_list sl ON r.subject_id = sl.id
-            LEFT JOIN faculty_list f ON r.faculty_id = f.id
-            LEFT JOIN class_list cl ON r.class_id = cl.id
-            LEFT JOIN academic_list a ON r.academic_id = a.id
-            WHERE r.student_id = '$student_id' AND r.academic_id = '$academic_id'
-            GROUP BY faculty_name, sl.subject, academic_year, class_details, cl.curriculum, r.faculty_id, f.avatar
-            ORDER BY faculty_name ASC");
-
+                $evaluations = $conn->query("SELECT DISTINCT 
+                    CONCAT(f.lastname, ', ', f.firstname) AS faculty_name,
+                    sl.subject,
+                    a.year AS academic_year,
+                    CONCAT(cl.level, ' - ', cl.section) AS class_details,
+                    cl.curriculum,
+                    r.faculty_id,
+                    f.avatar
+                FROM evaluation_list r
+                LEFT JOIN subject_list sl ON r.subject_id = sl.id
+                LEFT JOIN faculty_list f ON r.faculty_id = f.id
+                LEFT JOIN class_list cl ON r.class_id = cl.id
+                LEFT JOIN academic_list a ON r.academic_id = a.id
+                WHERE r.student_id = '$student_id' AND r.academic_id = '$academic_id'
+                ORDER BY f.lastname ASC");
 
                 while ($row = $evaluations->fetch_assoc()): 
                     $avatar = !empty($row['avatar']) ? 'assets/uploads/' . $row['avatar'] : 'assets/uploads/default_avatar.png';
                 ?>
                 <tr>
+                  
                     <td><?php echo ucwords($row['faculty_name']); ?></td>
                     <td><?php echo $row['subject']; ?></td>
                     <td><?php echo $row['academic_year'] . ' ' . ordinal_suffix($_SESSION['academic']['semester']) . ' Semester'; ?></td>
@@ -111,9 +111,109 @@ function ordinal_suffix($num) {
     .table-hover tbody tr:hover {
         background-color: #f2f2f2;
     }
+
+    .callout.callout-info{
+        border-left-color: #9b0a1e;
+    }
+
+    @media (max-width: 540px) {
+    .callout.callout-info {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .btn-info {
+        font-size: 12px;
+    }
+
+    .card-body {
+        padding: 10px;
+    }
+
+    .table th, .table td {
+        font-size: 12px;
+        padding: 8px;
+    }
+
+    .font-weight-bold {
+        font-size: 14px;
+    }
+
+    .ml-3 h5 {
+        font-size: 20px;
+    }
+}
+
+
+@media (max-width: 430px) {
+    .callout.callout-info {
+        padding: 8px;
+        font-size: 12px;
+    }
+
+    .input-group.mb-3 {
+        max-width: 90%;
+    }
+
+    .btn-info {
+        font-size: 10px;
+        padding: 5px 10px;
+    }
+
+    .card-body {
+        padding: 8px;
+    }
+
+    .table th, .table td {
+        font-size: 10px;
+        padding: 6px;
+    }
+
+    .font-weight-bold {
+        font-size: 12px;
+    }
+
+    .ml-3 h5 {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 414px) {
+    .callout.callout-info {
+        padding: 6px;
+        font-size: 10px;
+    }
+
+    .input-group.mb-3 {
+        max-width: 95%;
+    }
+
+    .btn-info {
+        font-size: 9px;
+        padding: 4px 8px;
+    }
+
+    .card-body {
+        padding: 6px;
+    }
+
+    .table th, .table td {
+        font-size: 9px;
+        padding: 5px;
+    }
+
+    .font-weight-bold {
+        font-size: 10px;
+    }
+
+    .ml-3 h5 {
+        font-size: 16px;
+    }
+}
 </style>
 
 <script>
+  
     $(document).ready(function() {
         let rowsPerPage = 5;
         let currentPage = 1;
@@ -135,23 +235,29 @@ function ordinal_suffix($num) {
         function filterTable(query) {
             $('#evaluation-table-body tr').each(function() {
                 const rowText = $(this).text().toLowerCase();
-                $(this).toggle(rowText.indexOf(query) > -1);
+                $(this).toggle(rowText.indexOf(query) > -1);  // Show or hide rows based on the query
             });
-            paginateTable();
+            paginateTable();  // Recalculate pagination after filtering
         }
 
         // Function to paginate the table
         function paginateTable() {
             const rows = $('#evaluation-table-body tr');
-            const filteredRows = rows.filter(':visible');
+            const filteredRows = rows.filter(':visible'); // Only visible rows are considered
             const totalRows = filteredRows.length;
             const totalPages = Math.ceil(totalRows / rowsPerPage);
 
+            // Hide all rows initially
             rows.hide();
+
+            // Calculate the range of rows to be displayed
             const start = (currentPage - 1) * rowsPerPage;
             const end = start + rowsPerPage;
+
+            // Show only the rows for the current page
             filteredRows.slice(start, end).show();
 
+            // Render pagination controls
             renderPaginationControls(totalPages, totalRows);
         }
 
@@ -159,6 +265,7 @@ function ordinal_suffix($num) {
         function renderPaginationControls(totalPages, totalRows) {
             $('#pagination-controls').empty();
 
+            // Disable buttons if necessary
             const prevButton = $('<button></button>')
                 .text('Previous')
                 .prop('disabled', currentPage === 1)
@@ -179,8 +286,10 @@ function ordinal_suffix($num) {
                     }
                 });
 
+            // Append the Previous button
             $('#pagination-controls').append(prevButton);
 
+            // Create page number buttons
             for (let i = 1; i <= totalPages; i++) {
                 const btn = $('<button></button>')
                     .text(i)
@@ -192,9 +301,11 @@ function ordinal_suffix($num) {
                 $('#pagination-controls').append(btn);
             }
 
+            // Append the Next button
             $('#pagination-controls').append(nextButton);
         }
 
+        // Initialize pagination
         paginateTable();
     });
 </script>
