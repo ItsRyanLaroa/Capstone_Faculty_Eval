@@ -40,21 +40,23 @@ function ordinal_suffix($num) {
                 $student_id = $_SESSION['login_id'];
                 $academic_id = $_SESSION['academic']['id'];
 
-                $evaluations = $conn->query("SELECT DISTINCT 
-                    CONCAT(f.lastname, ', ', f.firstname) AS faculty_name,
-                    sl.subject,
-                    a.year AS academic_year,
-                    CONCAT(cl.level, ' - ', cl.section) AS class_details,
-                    cl.curriculum,
-                    r.faculty_id,
-                    f.avatar
-                FROM evaluation_list r
-                LEFT JOIN subject_list sl ON r.subject_id = sl.id
-                LEFT JOIN faculty_list f ON r.faculty_id = f.id
-                LEFT JOIN class_list cl ON r.class_id = cl.id
-                LEFT JOIN academic_list a ON r.academic_id = a.id
-                WHERE r.student_id = '$student_id' AND r.academic_id = '$academic_id'
-                ORDER BY f.lastname ASC");
+              $evaluations = $conn->query("SELECT 
+                CONCAT(f.lastname, ', ', f.firstname) AS faculty_name,
+                sl.subject,
+                a.year AS academic_year,
+                CONCAT(cl.level, ' - ', cl.section) AS class_details,
+                cl.curriculum,
+                r.faculty_id,
+                f.avatar
+            FROM evaluation_list r
+            LEFT JOIN subject_list sl ON r.subject_id = sl.id
+            LEFT JOIN faculty_list f ON r.faculty_id = f.id
+            LEFT JOIN class_list cl ON r.class_id = cl.id
+            LEFT JOIN academic_list a ON r.academic_id = a.id
+            WHERE r.student_id = '$student_id' AND r.academic_id = '$academic_id'
+            GROUP BY faculty_name, sl.subject, academic_year, class_details, cl.curriculum, r.faculty_id, f.avatar
+            ORDER BY faculty_name ASC");
+
 
                 while ($row = $evaluations->fetch_assoc()): 
                     $avatar = !empty($row['avatar']) ? 'assets/uploads/' . $row['avatar'] : 'assets/uploads/default_avatar.png';
