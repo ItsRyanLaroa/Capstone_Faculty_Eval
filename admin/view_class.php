@@ -192,6 +192,9 @@ if (empty($subjects)) {
         color: black;
         box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     }
+    .card-success.card-outline {
+    border-top: 3px solid #9b0a1e;
+}
 </style>
 
 <script>
