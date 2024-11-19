@@ -64,7 +64,8 @@ $all_subjects = $stmt_subjects->get_result();
         <div class="card-header">
             <div class="card-tools">
                 <a class="btn btn-block btn-sm btn-default btn-flat border-primary new_subject" href="javascript:void(0)">
-                    <i class="fa fa-plus"></i> Add New
+                    <i class="fa fa-plus"></i> <span style="color: #dc143c; font-weight: bold;">Add New</span>
+                    </a>
                 </a>
             </div>
         </div>
@@ -156,9 +157,265 @@ function delete_subject_restriction(id){
 
 <style>
 
+    .col-lg-12{
+        box-shadow: 0 0 1px rgba(0, 0, 0, .125), 0 1px 3px rgba(0, 0, 0, .2);
+        margin-bottom: 1rem;
+    }
+
+.card-header {
+    background-color: transparent;
+    border-bottom: none;
+    padding: .75rem 1.25rem;
+    position: relative;
+    border-top-left-radius: .25rem;
+    border-top-right-radius: .25rem;
+}
+
 .card-tools i{
 	color: #dc143c;
 	font-weight: bold;
+}
+
+thead th {
+    background-color: #9b0a1e;
+    color:  #f3f3f3;
+
+    font-weight: bold;
+}
+
+@media (max-width: 540px) {
+    .card-body {
+        padding: 0.25rem;
+        font-size: 0.75rem;
+    }
+
+    .table {
+        font-size: 0.75rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .styled-table tbody tr td {
+        padding: 0.25rem;
+    }
+
+    .btn, .btn-sm {
+        font-size: 0.7rem;
+        padding: 0.25rem 0.4rem;
+    }
+
+
+    .card-header {
+        padding: 0.5rem;
+    }
+
+    .dropdown-menu {
+        font-size: 0.7rem;
+        padding: 0.5rem 0;
+    }
+
+    .dropdown-item {
+        padding: 0.25rem 0.5rem;
+    }
+
+
+    thead th {
+        padding: 0.25rem;
+        font-size: 0.75rem;
+    }
+
+
+    tbody tr {
+        height: 35px;
+    }
+
+
+    .text-center {
+        text-align: center;
+    }
+
+
+    .btn-flat {
+        font-size: 0.7rem;
+        padding: 0.25rem 0.5rem;
+    }
+
+
+    .card-outline {
+        border-width: 1px;
+    }
+
+
+    th, td {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+    }
+
+
+    .dropdown-toggle {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+    }
+
+    .card-header .card-tools{
+        margin-right: 3px;
+        margin-top: 3px;
+    }
+
+    .dataTables_length,
+    .dataTables_filter {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        font-size: 0.75rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .dataTables_length select,
+    .dataTables_filter input {
+        width: 100%;
+    }
+
+    .dataTables_length label,
+    .dataTables_filter label {
+        font-size: 0.75rem;
+    }
+
+   
+    .dataTables_paginate {
+        font-size: 0.75rem;
+    }
+
+    .dataTables_paginate .paginate_button {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 430px) {
+    .card-body {
+        padding: 0.1rem;
+        font-size: 0.55rem;
+        overflow-x: auto;
+        width: 100%;
+    }
+
+    .table {
+        font-size: 0.55rem;
+        margin-bottom: 0.1rem;
+        min-width: 600px; 
+    }
+
+    .styled-table tbody tr td {
+        padding: 0.1rem;
+    }
+
+    .btn, .btn-sm {
+        font-size: 0.55rem;
+        padding: 0.1rem 0.25rem;
+    }
+
+    .dropdown-menu {
+        font-size: 0.55rem;
+        padding: 0.1rem 0;
+    }
+
+    .dropdown-item {
+        padding: 0.1rem 0.25rem;
+    }
+
+    thead th {
+        padding: 0.1rem;
+        font-size: 0.75rem;
+    }
+
+
+    tbody tr {
+        height: 24px;
+    }
+
+
+    .text-center {
+        text-align: center;
+    }
+
+    .btn-flat {
+        font-size: 0.55rem;
+        padding: 0.1rem 0.25rem;
+    }
+
+
+    .dropdown-toggle {
+        font-size: 0.55rem;
+        padding: 0.1rem 0.25rem;
+    }
+  
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    .card {
+        margin: 0; 
+        width: 100%; 
+    }
+
+
+    .table, .card-body, .card-header {
+        width: 100%;
+    }
+
+
+    .dropdown-divider {
+        margin: 0.2rem 0;
+    }
+
+    .text-info {
+        font-size: 0.6rem;
+    }
+
+
+    tbody tr td, tbody tr th {
+        padding: 0.1rem 0.2rem;
+    }
+
+
+    .table-bordered, .card-outline {
+        border-width: 0;
+    }
+
+    .card-header .card-tools{
+        margin-right: 3px;
+        margin-top: 3px;
+    }
+
+    .dataTables_length,
+    .dataTables_filter {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        font-size: 0.75rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .dataTables_length select,
+    .dataTables_filter input {
+        width: 100%;
+    }
+
+    .dataTables_length label,
+    .dataTables_filter label {
+        font-size: 0.75rem;
+    }
+
+   
+    .dataTables_paginate {
+        font-size: 0.75rem;
+    }
+
+    .dataTables_paginate .paginate_button {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+    }
 }
 
 </style>

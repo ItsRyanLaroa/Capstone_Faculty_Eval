@@ -82,6 +82,7 @@ function ordinal_suffix($num) {
     </div>
 </div>
 
+
 <style>
     .bg-gradient-secondary {
         background: #B31B1C linear-gradient(182deg, #b31b1b, #dc3545) repeat-x !important;
@@ -109,6 +110,105 @@ function ordinal_suffix($num) {
     .table-hover tbody tr:hover {
         background-color: #f2f2f2;
     }
+
+    .callout.callout-info{
+        border-left-color: #9b0a1e;
+    }
+
+    @media (max-width: 540px) {
+    .callout.callout-info {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .btn-info {
+        font-size: 12px;
+    }
+
+    .card-body {
+        padding: 10px;
+    }
+
+    .table th, .table td {
+        font-size: 12px;
+        padding: 8px;
+    }
+
+    .font-weight-bold {
+        font-size: 14px;
+    }
+
+    .ml-3 h5 {
+        font-size: 20px;
+    }
+}
+
+
+@media (max-width: 430px) {
+    .callout.callout-info {
+        padding: 8px;
+        font-size: 12px;
+    }
+
+    .input-group.mb-3 {
+        max-width: 90%;
+    }
+
+    .btn-info {
+        font-size: 10px;
+        padding: 5px 10px;
+    }
+
+    .card-body {
+        padding: 8px;
+    }
+
+    .table th, .table td {
+        font-size: 10px;
+        padding: 6px;
+    }
+
+    .font-weight-bold {
+        font-size: 12px;
+    }
+
+    .ml-3 h5 {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 414px) {
+    .callout.callout-info {
+        padding: 6px;
+        font-size: 10px;
+    }
+
+    .input-group.mb-3 {
+        max-width: 95%;
+    }
+
+    .btn-info {
+        font-size: 9px;
+        padding: 4px 8px;
+    }
+
+    .card-body {
+        padding: 6px;
+    }
+
+    .table th, .table td {
+        font-size: 9px;
+        padding: 5px;
+    }
+
+    .font-weight-bold {
+        font-size: 10px;
+    }
+
+    .ml-3 h5 {
+        font-size: 16px;
+    }
+}
 </style>
 
 <script>

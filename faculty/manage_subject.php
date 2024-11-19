@@ -36,11 +36,11 @@ $query = "
         CONCAT(sl.code, ' - ', sl.subject) AS subject_name
     FROM subject_teacher st
     JOIN subject_list sl ON st.subject_id = sl.id
-    JOIN class_list cl ON FIND_IN_SET(st.subject_id, cl.subject_id) > 0
+    JOIN class_list cl ON FIND_IN_SET(?, cl.faculty_id) > 0
     WHERE st.faculty_id = ? 
-      AND cl.faculty_id = ? 
       AND st.academic_year = ?
 ";
+
 $stmt = $conn->prepare($query);
 $stmt->bind_param("iii", $faculty_id, $faculty_id, $active_academic_id);
 $stmt->execute();
@@ -117,41 +117,56 @@ while ($row = $classes_and_subjects_result->fetch_assoc()) {
     });
 
     $('#manage-restriction-<?php echo htmlspecialchars($faculty_id); ?>').submit(function(e) {
-        e.preventDefault();
-        $('input, select').removeClass("border-danger");
-        start_load();
+    e.preventDefault();
+    $('input, select').removeClass("border-danger");
 
-        const formData = new FormData($(this)[0]);
-        formData.append('academic_id', '<?php echo htmlspecialchars($active_academic_id); ?>');
+    var classSelected = $('#class_id-<?php echo htmlspecialchars($faculty_id); ?>').val();
+    var subjectSelected = $('#subject_id-<?php echo htmlspecialchars($faculty_id); ?>').val();
 
-        $.ajax({
-            url: 'ajax.php?action=save_restriction',
-            data: formData,
-            cache: false,
-            contentType: false,
-            processData: false,
-            method: 'POST',
-            success: function(resp) {
-                if (resp == 1) {
-                    alert_toast('Restriction successfully saved.', "success");
-                    setTimeout(function() {
-                        location.replace('index.php?page=subject');
-                    }, 750);
-                } else if (resp == 2) {
-                    alert_toast('Duplicate class and subject combination found.', "warning");
-                    end_load();
-                } else if (resp == 3) {
-                    alert_toast('Duplicate entry for this faculty ID.', "warning");
-                    end_load();
-                } else {
-                    alert_toast('Failed to save restriction.', "error");
-                    end_load();
-                }
-            },
-            error: function() {
-                alert_toast('An error occurred. Please try again.', "error");
+    if (!classSelected) {
+        $('#class_id-<?php echo htmlspecialchars($faculty_id); ?>').addClass("border-danger");
+        alert_toast('Please select a class.', "warning");
+        return false;
+    }
+    if (!subjectSelected) {
+        $('#subject_id-<?php echo htmlspecialchars($faculty_id); ?>').addClass("border-danger");
+        alert_toast('Please select a subject.', "warning");
+        return false;
+    }
+
+    start_load();
+    const formData = new FormData($(this)[0]);
+    formData.append('academic_id', '<?php echo htmlspecialchars($active_academic_id); ?>');
+
+    $.ajax({
+        url: 'ajax.php?action=save_restriction',
+        data: formData,
+        cache: false,
+        contentType: false,
+        processData: false,
+        method: 'POST',
+        success: function(resp) {
+            if (resp == 1) {
+                alert_toast('Restriction successfully saved.', "success");
+                setTimeout(function() {
+                    location.replace('index.php?page=subject');
+                }, 750);
+            } else if (resp == 2) {
+                alert_toast('Duplicate class and subject combination found.', "warning");
+                end_load();
+            } else if (resp == 3) {
+                alert_toast('Duplicate entry for this faculty ID.', "warning");
+                end_load();
+            } else {
+                alert_toast('Failed to save restriction.', "error");
                 end_load();
             }
-        });
+        },
+        error: function() {
+            alert_toast('An error occurred. Please try again.', "error");
+            end_load();
+        }
     });
+});
+
 </script>

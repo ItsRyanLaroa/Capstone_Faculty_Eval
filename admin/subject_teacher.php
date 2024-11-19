@@ -21,7 +21,133 @@ if (!$teachers_qry) {
     die("Query Error: " . $conn->error);
 }
 ?>
+<style>
+    .card-tools .btn{
+        color: #dc143c;
+    }
 
+    .card-primary.card-outline{
+        border-top: 3px solid #9b0a1e;
+    }
+
+    thead th {
+        background-color: #9b0a1e;
+        color: #f3f3f3;
+        font-weight: bold;
+    }
+
+    @media screen and (max-width: 540px) {
+
+        .card-header {
+            padding: 8px 15px;
+            font-size: 14px;
+        }
+
+        .card-header .btn {
+            padding: 5px 10px;
+            font-size: 13px;
+        }
+
+        .card-header .btn i {
+            margin-right: 5px;
+        }
+
+        .card-header .card-tools {
+            margin-top: 5px;
+        }
+
+        .card-header .btn-block {
+            width: auto;
+        }
+
+        .card-tools .btn, .add_teacher {
+            width: 100%;
+            margin: 5px 0;
+        }
+
+        .table {
+            width: 100%;
+            display: block;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            table-layout: auto;
+        }
+
+        .table th, .table td {
+            padding: 8px;
+            font-size: 12px;
+        }
+
+        .table th {
+            text-align: left;
+        }
+
+
+        .card-title {
+            font-size: 14px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+
+        .btn {
+            font-size: 14px;
+            padding: 8px;
+        }
+
+
+        .styled-table {
+            width: 100%;
+        }
+
+        .btn-danger.btn-flat {
+            font-size: 12px;
+            padding: 6px;
+        }
+
+ 
+        td button {
+            padding: 6px;
+            font-size: 12px;
+        }
+
+        .dataTables_length {
+        margin-bottom: 1rem;
+        font-size: 0.875rem;
+    }
+
+    .dataTables_filter {
+        margin-bottom: .5rem;
+        font-size: 0.875rem;
+    }
+
+    .dataTables_length,
+    .dataTables_filter {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .dataTables_length label,
+    .dataTables_filter label {
+        font-size: 0.875rem;
+    }
+
+    .dataTables_length select,
+    .dataTables_filter input {
+        width: 100%;
+    }
+
+    .dataTables_paginate {
+        font-size: 0.875rem;
+    }
+
+    .dataTables_paginate .paginate_button {
+        padding: 0.375rem 0.75rem;
+        font-size: 0.875rem;
+    }
+    }
+</style>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -84,9 +210,6 @@ if (!$teachers_qry) {
     </div>
 </div>
 
-<script src="path/to/your/js/jquery.min.js"></script>
-<script src="path/to/your/js/bootstrap.bundle.min.js"></script>
-<script src="path/to/your/js/datatables.min.js"></script>
 <script>
    $(document).ready(function(){
     $('#teacher_list').dataTable();

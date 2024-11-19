@@ -60,8 +60,8 @@ h3{
         <br>
         <div class="col-md-5">
           <div class="callout callout-info">
-            <h5><b>Academic Year: <span style="color: #dc143c;"><?php echo $_SESSION['academic']['year'].' ('.ordinal_suffix1($_SESSION['academic']['semester']).' Semester)'; ?></span></b></h5>
-            <h6><b>Evaluation Status: <span style="color: #dc143c;"><?php echo $astat[$_SESSION['academic']['status']] ?></span></h6>
+            <h5><b>Academic Year: <span style="color: #9b0a1e;"><?php echo $_SESSION['academic']['year'].' ('.ordinal_suffix1($_SESSION['academic']['semester']).' Semester)'; ?></span></b></h5>
+            <h6><b>Evaluation Status: <span style="color: #9b0a1e;"><?php echo $astat[$_SESSION['academic']['status']] ?></span></h6>
           </div>
         </div>
       </div>

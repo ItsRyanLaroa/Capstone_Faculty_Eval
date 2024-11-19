@@ -1,7 +1,7 @@
 <div class="nav-bar">
     <a href="./index.php?page=category" class="nav-link nav-category <?php echo (isset($_GET['page']) && $_GET['page'] == 'category') ? 'active' : ''; ?>">Category</a>
     <a href="./index.php?page=semester" class="nav-link nav-semester <?php echo (isset($_GET['page']) && $_GET['page'] == 'semester') ? 'active' : ''; ?>">Semester</a>
-    <a href="#" class="nav-link nav-questionnaire <?php echo (isset($_GET['page']) && $_GET['page'] == 'questionnaire') ? 'active' : ''; ?>" id="questionnaireLink">Questionnaire</a>
+    <a href="#" class="nav-link nav-questionnaire <?php echo (isset($_GET['page']) && $_GET['page'] == 'questionnaire') ? 'active' : ''; ?>" id="questionnaireLink">Questions</a>
 </div>
 
 <div class="center">
@@ -18,7 +18,7 @@
                 </option>
             <?php endwhile; ?>
         </select>
-        <button id="manageQuestionnaireButton" disabled>Manage Questionnaire</button>
+        <button id="manageQuestionnaireButton" disabled>Manage Questions</button>
     </div>
 </div>
 
@@ -76,7 +76,7 @@
 
     /* Button styling */
     #manageQuestionnaireButton {
-        background-color: #dc143c;
+        background-color: #9b0a1e;
         color: #ffffff;
         border: none;
         padding: 12px 20px;

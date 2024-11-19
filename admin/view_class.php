@@ -20,32 +20,54 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         $class_id = $class_data['class_id'];
         
         // Fetch teachers
-        $teacher_ids = explode(',', $class_data['faculty_id']);
-        $teachers = [];
-        if (!empty($teacher_ids)) {
-            $teacher_id_placeholders = implode(',', array_fill(0, count($teacher_ids), '?'));
-            $teacher_qry = $conn->prepare("SELECT firstname, lastname FROM faculty_list WHERE id IN ($teacher_id_placeholders)");
-            $teacher_qry->bind_param(str_repeat('i', count($teacher_ids)), ...$teacher_ids);
-            $teacher_qry->execute();
-            $teacher_result = $teacher_qry->get_result();
-            while ($teacher_row = $teacher_result->fetch_assoc()) {
-                $teachers[] = $teacher_row['firstname'] . ' ' . $teacher_row['lastname'];
-            }
-        }
+       // Fetch subjects only for the specified teacher(s) and active academic year
+// Initialize $teachers and $subjects as empty arrays
+$teachers = [];
+$subjects = [];
 
-        // Fetch subjects
-        $subject_ids = explode(',', $class_data['subject_id']);
-        $subjects = [];
-        if (!empty($subject_ids)) {
-            $subject_id_placeholders = implode(',', array_fill(0, count($subject_ids), '?'));
-            $subject_qry = $conn->prepare("SELECT code FROM subject_list WHERE id IN ($subject_id_placeholders)");
-            $subject_qry->bind_param(str_repeat('i', count($subject_ids)), ...$subject_ids);
-            $subject_qry->execute();
-            $subject_result = $subject_qry->get_result();
-            while ($subject_row = $subject_result->fetch_assoc()) {
-                $subjects[] = $subject_row['code'];
-            }
-        }
+// Fetch teachers
+$teacher_ids = explode(',', $class_data['faculty_id']);
+if (!empty($teacher_ids)) {
+    $teacher_id_placeholders = implode(',', array_fill(0, count($teacher_ids), '?'));
+    $teacher_qry = $conn->prepare("SELECT firstname, lastname FROM faculty_list WHERE id IN ($teacher_id_placeholders)");
+    $teacher_qry->bind_param(str_repeat('i', count($teacher_ids)), ...$teacher_ids);
+    $teacher_qry->execute();
+    $teacher_result = $teacher_qry->get_result();
+    while ($teacher_row = $teacher_result->fetch_assoc()) {
+        $teachers[] = $teacher_row['firstname'] . ' ' . $teacher_row['lastname'];
+    }
+}
+
+// If no teachers were found, use a default value
+if (empty($teachers)) {
+    $teachers = ['N/A'];
+}
+
+// Fetch subjects
+$faculty_ids = explode(',', $class_data['faculty_id']);
+if (!empty($faculty_ids)) {
+    $faculty_id_placeholders = implode(',', array_fill(0, count($faculty_ids), '?'));
+    $subject_qry = $conn->prepare("
+        SELECT DISTINCT s.code 
+        FROM subject_list s
+        INNER JOIN subject_teacher st ON s.id = st.subject_id
+        INNER JOIN academic_list a ON st.academic_year = a.id
+        WHERE st.faculty_id IN ($faculty_id_placeholders) AND a.status = 1
+    ");
+    $subject_qry->bind_param(str_repeat('i', count($faculty_ids)), ...$faculty_ids);
+    $subject_qry->execute();
+    $subject_result = $subject_qry->get_result();
+    while ($subject_row = $subject_result->fetch_assoc()) {
+        $subjects[] = $subject_row['code'];
+    }
+}
+
+// If no subjects were found, use a default value
+if (empty($subjects)) {
+    $subjects = ['N/A'];
+}
+
+
     } else {
         $class_name = 'N/A';
         $class_id = 'N/A';

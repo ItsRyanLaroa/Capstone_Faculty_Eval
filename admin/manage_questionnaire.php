@@ -85,11 +85,11 @@ function ordinal_suffix($num){
     }
 
 	.card-info.card-outline{
-    	border-top: 3px solid #dc143c;
+    	border-top: 3px solid #9b0a1e;
 	}
     .card button {
         padding: 10px 15px;
-        background-color: #dc143c;
+        background-color: #9b0a1e;
         color: white;
         border: none;
         border-radius: 5px;
@@ -112,8 +112,87 @@ function ordinal_suffix($num){
 	}
 
 	.border-info{
-		border-color: #dc143c !important;
+		border-color: #9b0a1e !important;
 	}
+
+	@media (max-width: 480px) {
+    .card-body table {
+        font-size: 12px;
+    }
+
+    .card-body table th, 
+    .card-body table td {
+        padding: 4px;
+    }
+
+    .card-body table th {
+        font-size: 10px;
+    }
+
+    .card-body table td {
+        font-size: 10px;
+    }
+
+	.card-body table tr{
+		font-size: 10px;
+	}
+
+    .card-body table .icheck-success {
+        font-size: 10px;
+    }
+
+    .card-body {
+        overflow-x: auto;
+    }
+
+    .card-body table {
+        width: 100%;
+        table-layout: fixed;
+    }
+
+}
+
+@media (max-width: 480px) {
+
+    .col-md-8 .card-header {
+        font-size: 14px;
+        padding: 8px 10px;
+    }
+
+	.col-md-8 .card-header .card-tools {
+		margin-top: 5px;
+		margin-right: 5px;
+    }
+
+    .col-md-8 .card-header b {
+        font-size: 14px;
+    }
+
+
+    .col-md-8 .card-header .card-tools button {
+        font-size: 12px;
+        padding: 5px 8px;
+    }
+    
+
+    .col-md-8 .card-body {
+        padding: 10px;
+    }
+
+	.col-md-8 .card-body fieldset {
+        border: 1px solid #ddd;
+        padding: 10px;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+
+
+    .col-md-8 .card-body fieldset legend {
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 8px; 
+    }
+}
 
 </style>
 

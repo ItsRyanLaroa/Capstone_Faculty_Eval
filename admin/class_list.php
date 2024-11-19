@@ -127,6 +127,37 @@ tbody tr:hover {
     color: #007bff;
 }
 
+@media (max-width: 540px) {
+	.dataTables_length,
+    .dataTables_filter {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        font-size: 0.75rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .dataTables_length select,
+    .dataTables_filter input {
+        width: 100%;
+    }
+
+    .dataTables_length label,
+    .dataTables_filter label {
+        font-size: 0.75rem;
+    }
+
+   
+    .dataTables_paginate {
+        font-size: 0.75rem;
+    }
+
+    .dataTables_paginate .paginate_button {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+    }
+}
+
 </style>
 
 

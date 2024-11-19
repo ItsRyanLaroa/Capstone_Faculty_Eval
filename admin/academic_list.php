@@ -64,8 +64,437 @@ tbody tr:hover {
     background-color: #95d2ec;
 }
 
-</style>
+@media (max-width: 540px) {
+    .card-body {
+        padding: 0.5rem;
+    }
 
+    .styled-table {
+        font-size: 12px;
+    }
+
+
+    .styled-table td, .styled-table th {
+        padding: 8px;
+    }
+
+    .btn-sm {
+        font-size: 12px;
+        padding: 5px 10px;
+    }
+
+    .new_academic {
+        font-size: 12px;
+        padding: 5px 10px;
+    }
+
+    .card-header {
+        padding: 0.5rem 1rem;
+    }
+
+	.dataTables_length,
+    .dataTables_filter {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        font-size: 0.75rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .dataTables_length select,
+    .dataTables_filter input {
+        width: 100%;
+    }
+
+    .dataTables_length label,
+    .dataTables_filter label {
+        font-size: 0.75rem;
+    }
+
+   
+    .dataTables_paginate {
+        font-size: 0.75rem;
+    }
+
+    .dataTables_paginate .paginate_button {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 430px) {
+    .card-body {
+        padding: 0.25rem;
+    }
+
+
+    .styled-table {
+        font-size: 10px;
+    }
+
+    .styled-table td, .styled-table th {
+        padding: 2px;
+    }
+
+    .btn-sm {
+        font-size: 10px;
+        padding: 3px 6px;
+    }
+
+    .new_academic {
+        font-size: 10px;
+        padding: 3px 6px;
+    }
+
+
+    .table th, .table td {
+        font-size: 10px;
+    }
+
+    .btn-group .btn {
+        font-size: 10px;
+        padding: 5px 8px;
+    }
+
+	.dataTables_length,
+    .dataTables_filter {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        font-size: 0.75rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .dataTables_length select,
+    .dataTables_filter input {
+        width: 100%;
+    }
+
+    .dataTables_length label,
+    .dataTables_filter label {
+        font-size: 0.75rem;
+    }
+
+   
+    .dataTables_paginate {
+        font-size: 0.75rem;
+    }
+
+    .dataTables_paginate .paginate_button {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 414px) {
+    .card-body {
+        padding: 0.25rem;
+    }
+
+
+    .styled-table {
+        font-size: 10px;
+    }
+
+    .styled-table td, .styled-table th {
+        padding: 2px;
+    }
+
+    .btn-sm {
+        font-size: 10px;
+        padding: 3px 6px;
+    }
+
+    .new_academic {
+        font-size: 10px;
+        padding: 3px 6px;
+    }
+
+
+    .table th, .table td {
+        font-size: 10px;
+    }
+
+    .btn-group .btn {
+        font-size: 10px;
+        padding: 5px 8px;
+    }
+
+	.dataTables_length,
+    .dataTables_filter {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        font-size: 0.75rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .dataTables_length select,
+    .dataTables_filter input {
+        width: 100%;
+    }
+
+    .dataTables_length label,
+    .dataTables_filter label {
+        font-size: 0.75rem;
+    }
+
+   
+    .dataTables_paginate {
+        font-size: 0.75rem;
+    }
+
+    .dataTables_paginate .paginate_button {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 414px) {
+
+    .card-body {
+        padding: 0.25rem;
+    }
+
+
+    .styled-table {
+        font-size: 9px;
+    }
+
+
+    .styled-table td, .styled-table th {
+        padding: 4px;
+    }
+
+
+    .btn-sm {
+        font-size: 9px;
+        padding: 4px 6px;
+    }
+
+
+    .new_academic {
+        font-size: 9px;
+        padding: 4px 6px;
+    }
+
+
+    .btn-group .btn {
+        font-size: 9px; 
+        padding: 5px 8px;
+    }
+
+    .table th, .table td {
+        font-size: 8px;
+    }
+
+
+    .btn-group {
+        display: block;
+        width: 100%;
+        margin-top: 5px;
+    }
+
+
+    .new_academic {
+        width: 100%;
+        font-size: 9px;
+    }
+
+	.dataTables_length,
+    .dataTables_filter {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        font-size: 0.75rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .dataTables_length select,
+    .dataTables_filter input {
+        width: 100%;
+    }
+
+    .dataTables_length label,
+    .dataTables_filter label {
+        font-size: 0.75rem;
+    }
+
+   
+    .dataTables_paginate {
+        font-size: 0.75rem;
+    }
+
+    .dataTables_paginate .paginate_button {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 390px) {
+    .card-body {
+        padding: 0.25rem;
+    }
+
+
+    .styled-table {
+        font-size: 8px;
+    }
+
+    .styled-table td, .styled-table th {
+        padding: 3px;
+    }
+
+
+    .btn-sm {
+        font-size: 8px;
+        padding: 3px 5px;
+    }
+
+
+    .new_academic {
+        font-size: 8px;
+        padding: 3px 5px;
+    }
+
+    .btn-group .btn {
+        font-size: 8px;
+        padding: 4px 6px;
+    }
+
+
+    .table th, .table td {
+        font-size: 7px;
+    }
+
+    .btn-group {
+        display: block;
+        width: 100%;
+        margin-top: 5px;
+    }
+
+    .new_academic {
+        width: 100%;
+        font-size: 8px;
+    }
+
+    .styled-table {
+        overflow-x: auto;
+    }
+
+	.dataTables_length,
+    .dataTables_filter {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        font-size: 0.75rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .dataTables_length select,
+    .dataTables_filter input {
+        width: 100%;
+    }
+
+    .dataTables_length label,
+    .dataTables_filter label {
+        font-size: 0.75rem;
+    }
+
+   
+    .dataTables_paginate {
+        font-size: 0.75rem;
+    }
+
+    .dataTables_paginate .paginate_button {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 375px) {
+    .card-body {
+        padding: 0.25rem;
+    }
+
+
+    .styled-table {
+        font-size: 8px;
+    }
+
+    .styled-table td, .styled-table th {
+        padding: 2px;
+    }
+
+
+    .btn-sm {
+        font-size: 8px;
+        padding: 3px 5px;
+    }
+
+
+    .new_academic {
+        font-size: 8px;
+        padding: 3px 5px;
+    }
+
+    .btn-group .btn {
+        font-size: 8px;
+        padding: 4px 6px;
+    }
+
+
+    .table th, .table td {
+        font-size: 7px;
+    }
+
+    .btn-group {
+        display: block;
+        width: 100%;
+        margin-top: 5px;
+    }
+
+    .new_academic {
+        width: 100%;
+        font-size: 8px;
+    }
+
+    .styled-table {
+        overflow-x: auto;
+    }
+
+	.dataTables_length,
+    .dataTables_filter {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        font-size: 0.75rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .dataTables_length select,
+    .dataTables_filter input {
+        width: 100%;
+    }
+
+    .dataTables_length label,
+    .dataTables_filter label {
+        font-size: 0.75rem;
+    }
+
+   
+    .dataTables_paginate {
+        font-size: 0.75rem;
+    }
+
+    .dataTables_paginate .paginate_button {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+    }
+}
+
+
+</style>
 <?php include'db_connect.php' ?>
 <div class="col-lg-12">
 	<div class="card card-outline card-primary">

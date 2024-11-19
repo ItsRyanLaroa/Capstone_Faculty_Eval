@@ -88,7 +88,6 @@ $evaluations = $conn->query("
         </div>
     </div>
 </div>
-
 <style>
     .styled-table tbody tr {
         border-bottom: 1px solid #dddddd;
@@ -107,7 +106,194 @@ $evaluations = $conn->query("
     tbody tr:hover {
         background-color: #95d2ec;
     }
+
+    .card-success.card-outline{
+        border-top: 3px solid #9b0a1e !important;
+    }
+
+    @media (max-width: 540px) {
+    .callout.callout-info {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .btn-info {
+        font-size: 12px;
+    }
+
+    .card-body {
+        padding: 10px;
+    }
+
+    .table th, .table td {
+        font-size: 12px;
+        padding: 8px;
+    }
+
+    .font-weight-bold {
+        font-size: 14px;
+    }
+
+    .ml-3 h5 {
+        font-size: 20px;
+    }
+
+    .dataTables_length,
+    .dataTables_filter {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        font-size: 0.75rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .dataTables_length select,
+    .dataTables_filter input {
+        width: 100%;
+    }
+
+    .dataTables_length label,
+    .dataTables_filter label {
+        font-size: 0.75rem;
+    }
+
+   
+    .dataTables_paginate {
+        font-size: 0.75rem;
+    }
+
+    .dataTables_paginate .paginate_button {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+    }
+}
+
+
+@media (max-width: 430px) {
+    .callout.callout-info {
+        padding: 8px;
+        font-size: 12px;
+    }
+
+    .input-group.mb-3 {
+        max-width: 90%;
+    }
+
+    .btn-info {
+        font-size: 10px;
+        padding: 5px 10px;
+    }
+
+    .card-body {
+        padding: 8px;
+    }
+
+    .table th, .table td {
+        font-size: 10px;
+        padding: 6px;
+    }
+
+    .font-weight-bold {
+        font-size: 12px;
+    }
+
+    .ml-3 h5 {
+        font-size: 18px;
+    }
+
+    .dataTables_length,
+    .dataTables_filter {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        font-size: 0.75rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .dataTables_length select,
+    .dataTables_filter input {
+        width: 100%;
+    }
+
+    .dataTables_length label,
+    .dataTables_filter label {
+        font-size: 0.75rem;
+    }
+
+   
+    .dataTables_paginate {
+        font-size: 0.75rem;
+    }
+
+    .dataTables_paginate .paginate_button {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 414px) {
+    .callout.callout-info {
+        padding: 6px;
+        font-size: 10px;
+    }
+
+    .input-group.mb-3 {
+        max-width: 95%;
+    }
+
+    .btn-info {
+        font-size: 9px;
+        padding: 4px 8px;
+    }
+
+    .card-body {
+        padding: 6px;
+    }
+
+    .table th, .table td {
+        font-size: 9px;
+        padding: 5px;
+    }
+
+    .font-weight-bold {
+        font-size: 10px;
+    }
+
+    .ml-3 h5 {
+        font-size: 16px;
+    }
+
+    .dataTables_length,
+    .dataTables_filter {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        font-size: 0.75rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .dataTables_length select,
+    .dataTables_filter input {
+        width: 100%;
+    }
+
+    .dataTables_length label,
+    .dataTables_filter label {
+        font-size: 0.75rem;
+    }
+
+   
+    .dataTables_paginate {
+        font-size: 0.75rem;
+    }
+
+    .dataTables_paginate .paginate_button {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+    }
+}
 </style>
+
 
 <script>
     $(document).ready(function() {

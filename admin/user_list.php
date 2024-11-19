@@ -1,13 +1,347 @@
 <?php include'db_connect.php' ?>
 <style>
 	.card-success.card-outline{
-		border-top: 3px solid #dc143c;;
+		border-top: 3px solid #9b0a1e;;
 	}
 
 	.card-tools i{
 		color: #dc143c;
 		font-weight: bold;
 	}
+
+	thead th {
+    background-color: #9b0a1e;
+    color: #f3f3f3;
+    font-weight: bold;
+}
+
+@media (max-width: 540px) {
+        .card-body {
+            padding: 10px;
+        }
+
+        .card {
+            margin: 0 auto;
+            width: 90%;
+        }
+
+        .card-header {
+            padding: 5px;
+        }
+
+        .table {
+            font-size: 12px;
+        }
+
+
+        .btn-sm {
+            font-size: 10px;
+            padding: 5px 10px;
+        }
+
+
+        .card-header .card-tools {
+            display: flex;
+            justify-content: center;
+        }
+
+		.card-header .card-tools {
+            font-size: 12px;
+			margin-right: 3px;
+			margin-top: 3px;
+        }
+
+
+	.dataTables_length,
+    .dataTables_filter {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        font-size: 0.75rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .dataTables_length select,
+    .dataTables_filter input {
+        width: 100%;
+    }
+
+    .dataTables_length label,
+    .dataTables_filter label {
+        font-size: 0.75rem;
+    }
+
+   
+    .dataTables_paginate {
+        font-size: 0.75rem;
+    }
+
+    .dataTables_paginate .paginate_button {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+    }
+    }
+
+	@media (max-width: 430px) {
+        .card-body {
+            padding: 8px;
+        }
+
+        .card {
+            margin: 0 auto;
+            width: 95%;
+        }
+
+        .card-header {
+            padding: 5px;
+        }
+
+        .card-tools {
+            font-size: 10px;
+        }
+
+
+        .table {
+            font-size: 10px;
+        }
+
+
+        .btn-sm {
+            font-size: 9px;
+            padding: 4px 8px;
+        }
+
+
+        .card-header .card-tools {
+            display: flex;
+            justify-content: center;
+        }
+
+        .card-tools a {
+            font-size: 10px;
+            padding: 4px 8px;
+        }
+
+        
+        td, th {
+            font-size: 10px;
+        }
+
+
+        td b, th {
+            white-space: nowrap; 
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+
+		.card-header .card-tools {
+            font-size: 12px;
+			margin-right: 3px;
+			margin-top: 3px;
+        }
+
+
+	.dataTables_length,
+    .dataTables_filter {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        font-size: 0.75rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .dataTables_length select,
+    .dataTables_filter input {
+        width: 100%;
+    }
+
+    .dataTables_length label,
+    .dataTables_filter label {
+        font-size: 0.75rem;
+    }
+
+   
+    .dataTables_paginate {
+        font-size: 0.75rem;
+    }
+
+    .dataTables_paginate .paginate_button {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+    }
+    }
+
+	@media (max-width: 414px) {
+        .card-body {
+            padding: 8px; 
+        }
+
+        .card {
+            margin: 0 auto; 
+            width: 95%; 
+        }
+
+        .card-header {
+            padding: 5px; 
+        }
+
+
+        .table {
+            font-size: 10px; 
+        }
+
+        .btn-sm {
+            font-size: 9px;
+            padding: 4px 8px;
+        }
+
+
+        .card-header .card-tools {
+            display: flex;
+            justify-content: center;
+        }
+
+        .card-tools a {
+            font-size: 10px; 
+            padding: 4px 8px;
+        }
+
+        td, th {
+            font-size: 10px;
+        }
+
+
+        td b, th {
+            white-space: nowrap; 
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+
+		.card-header .card-tools {
+            font-size: 12px;
+			margin-right: 3px;
+			margin-top: 3px;
+        }
+
+
+	.dataTables_length,
+    .dataTables_filter {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        font-size: 0.75rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .dataTables_length select,
+    .dataTables_filter input {
+        width: 100%;
+    }
+
+    .dataTables_length label,
+    .dataTables_filter label {
+        font-size: 0.75rem;
+    }
+
+   
+    .dataTables_paginate {
+        font-size: 0.75rem;
+    }
+
+    .dataTables_paginate .paginate_button {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+    }
+    }
+
+	@media (max-width: 390px) {
+        .card-body {
+            padding: 6px;
+        }
+
+        .card {
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .card-header {
+            padding: 4px;
+        }
+
+
+        .table {
+            font-size: 9px;
+        }
+
+
+        .btn-sm {
+            font-size: 8px;
+            padding: 3px 6px;
+        }
+
+
+        .card-header .card-tools {
+            display: flex;
+            justify-content: center;
+        }
+
+        .card-tools a {
+            font-size: 9px;
+            padding: 3px 6px;
+        }
+
+
+        td, th {
+            font-size: 9px;
+        }
+
+        td b, th {
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+
+        .card-header .card-tools a {
+            padding: 3px 6px;
+            font-size: 8px;
+        }
+
+		.card-header .card-tools {
+            font-size: 12px;
+			margin-right: 3px;
+			margin-top: 3px;
+        }
+
+
+	.dataTables_length,
+    .dataTables_filter {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        font-size: 0.75rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .dataTables_length select,
+    .dataTables_filter input {
+        width: 100%;
+    }
+
+    .dataTables_length label,
+    .dataTables_filter label {
+        font-size: 0.75rem;
+    }
+
+   
+    .dataTables_paginate {
+        font-size: 0.75rem;
+    }
+
+    .dataTables_paginate .paginate_button {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+    }
+    }
 </style>
 <div class="col-lg-12">
 	<div class="card card-outline card-success">

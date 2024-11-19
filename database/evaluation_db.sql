@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 15, 2024 at 04:01 PM
+-- Generation Time: Nov 09, 2024 at 03:20 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -41,7 +41,7 @@ CREATE TABLE `academic_list` (
 
 INSERT INTO `academic_list` (`id`, `year`, `semester`, `is_default`, `status`) VALUES
 (1, '2019-2020', 1, 0, 0),
-(2, '2019-2020', 2, 0, 2),
+(2, '2019-2020', 2, 0, 0),
 (3, '2020-2021', 1, 1, 1);
 
 -- --------------------------------------------------------
@@ -56,7 +56,7 @@ CREATE TABLE `class_list` (
   `level` text NOT NULL,
   `section` text NOT NULL,
   `class_code` varchar(10) NOT NULL,
-  `faculty_id` varchar(100) NOT NULL,
+  `teacher_id` varchar(10) NOT NULL,
   `subject_id` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -64,11 +64,14 @@ CREATE TABLE `class_list` (
 -- Dumping data for table `class_list`
 --
 
-INSERT INTO `class_list` (`id`, `curriculum`, `level`, `section`, `class_code`, `faculty_id`, `subject_id`) VALUES
+INSERT INTO `class_list` (`id`, `curriculum`, `level`, `section`, `class_code`, `teacher_id`, `subject_id`) VALUES
+(1, 'BSIT', '1', 'A', '', '2', '2'),
+(2, 'BSIT', '1', 'B', '', '2', '2'),
+(6, 'BSIT', '3', 'D', '23f468c6', '1', '3'),
 (10, 'BSCRIM', '2', 'D', 'VKfNuQaW', '2', '1,3'),
+(11, 'BEED', '1', 'D', 'qto2azGY', '2,13', '1,3'),
 (13, 'BSBA', '4', 'A', 'Z8vwg93A', '2', '1,3,4'),
-(17, 'BSIT', '4', 'C', 'gN1xmbC7', '14,15,16,17,18', '5,9,6,7,8'),
-(19, 'BEED', '2', 'D', 'zd24DTNK', '2', '1,4,3');
+(14, 'BSIT', '4', 'C', '2ghivwbl', '12,2', '1,4,5');
 
 -- --------------------------------------------------------
 
@@ -88,7 +91,7 @@ CREATE TABLE `criteria_list` (
 
 INSERT INTO `criteria_list` (`id`, `criteria`, `order_by`) VALUES
 (5, 'Category 1: Teaching Effectiveness', 0),
-(7, 'Category 2: Professionalism and Engagement', 1);
+(7, 'Category 2: Professionalism and Classroom Management', 1);
 
 -- --------------------------------------------------------
 
@@ -99,175 +102,8 @@ INSERT INTO `criteria_list` (`id`, `criteria`, `order_by`) VALUES
 CREATE TABLE `evaluation_answers` (
   `evaluation_id` int(30) NOT NULL,
   `question_id` int(30) NOT NULL,
-  `rate` int(20) NOT NULL,
-  `feedback` varchar(255) DEFAULT NULL
+  `rate` int(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `evaluation_answers`
---
-
-INSERT INTO `evaluation_answers` (`evaluation_id`, `question_id`, `rate`, `feedback`) VALUES
-(1, 1, 5, NULL),
-(1, 2, 5, NULL),
-(1, 3, 5, NULL),
-(1, 4, 5, NULL),
-(1, 5, 5, NULL),
-(1, 6, 5, NULL),
-(1, 7, 5, NULL),
-(1, 8, 5, NULL),
-(1, 9, 5, NULL),
-(1, 10, 5, NULL),
-(1, 11, 5, NULL),
-(1, 12, 5, NULL),
-(1, 13, 5, NULL),
-(1, 14, 5, NULL),
-(1, 15, 5, NULL),
-(1, 16, 5, NULL),
-(1, 17, 5, NULL),
-(1, 18, 5, NULL),
-(1, 19, 5, NULL),
-(1, 20, 5, NULL),
-(2, 1, 5, NULL),
-(2, 2, 5, NULL),
-(2, 3, 5, NULL),
-(2, 4, 5, NULL),
-(2, 5, 5, NULL),
-(2, 6, 5, NULL),
-(2, 7, 5, NULL),
-(2, 8, 5, NULL),
-(2, 9, 5, NULL),
-(2, 10, 5, NULL),
-(2, 11, 5, NULL),
-(2, 12, 5, NULL),
-(2, 13, 5, NULL),
-(2, 14, 5, NULL),
-(2, 15, 5, NULL),
-(2, 16, 5, NULL),
-(2, 17, 5, NULL),
-(2, 18, 5, NULL),
-(2, 19, 5, NULL),
-(2, 20, 5, NULL),
-(3, 1, 5, NULL),
-(3, 2, 5, NULL),
-(3, 3, 5, NULL),
-(3, 4, 5, NULL),
-(3, 5, 5, NULL),
-(3, 6, 5, NULL),
-(3, 7, 5, NULL),
-(3, 8, 5, NULL),
-(3, 9, 5, NULL),
-(3, 10, 5, NULL),
-(3, 11, 5, NULL),
-(3, 12, 5, NULL),
-(3, 13, 5, NULL),
-(3, 14, 5, NULL),
-(3, 15, 5, NULL),
-(3, 16, 5, NULL),
-(3, 17, 5, NULL),
-(3, 18, 5, NULL),
-(3, 19, 5, NULL),
-(3, 20, 5, NULL),
-(4, 1, 5, NULL),
-(4, 2, 5, NULL),
-(4, 3, 5, NULL),
-(4, 4, 5, NULL),
-(4, 5, 5, NULL),
-(4, 6, 5, NULL),
-(4, 7, 5, NULL),
-(4, 8, 5, NULL),
-(4, 9, 5, NULL),
-(4, 10, 5, NULL),
-(4, 11, 5, NULL),
-(4, 12, 5, NULL),
-(4, 13, 5, NULL),
-(4, 14, 5, NULL),
-(4, 15, 5, NULL),
-(4, 16, 5, NULL),
-(4, 17, 5, NULL),
-(4, 18, 5, NULL),
-(4, 19, 5, NULL),
-(4, 20, 5, NULL),
-(5, 1, 5, NULL),
-(5, 2, 5, NULL),
-(5, 3, 5, NULL),
-(5, 4, 5, NULL),
-(5, 5, 5, NULL),
-(5, 6, 5, NULL),
-(5, 7, 5, NULL),
-(5, 8, 5, NULL),
-(5, 9, 5, NULL),
-(5, 10, 5, NULL),
-(5, 11, 5, NULL),
-(5, 12, 5, NULL),
-(5, 13, 5, NULL),
-(5, 14, 5, NULL),
-(5, 15, 5, NULL),
-(5, 16, 5, NULL),
-(5, 17, 5, NULL),
-(5, 18, 5, NULL),
-(5, 19, 5, NULL),
-(5, 20, 5, NULL),
-(6, 1, 5, 'saewqe'),
-(6, 2, 5, 'saewqe'),
-(6, 3, 5, 'saewqe'),
-(6, 4, 5, 'saewqe'),
-(6, 5, 5, 'saewqe'),
-(6, 6, 5, 'saewqe'),
-(6, 7, 5, 'saewqe'),
-(6, 8, 5, 'saewqe'),
-(6, 9, 5, 'saewqe'),
-(6, 10, 5, 'saewqe'),
-(6, 11, 5, 'saewqe'),
-(6, 12, 5, 'saewqe'),
-(6, 13, 5, 'saewqe'),
-(6, 14, 5, 'saewqe'),
-(6, 15, 5, 'saewqe'),
-(6, 16, 5, 'saewqe'),
-(6, 17, 5, 'saewqe'),
-(6, 18, 5, 'saewqe'),
-(6, 19, 5, 'saewqe'),
-(6, 20, 5, 'saewqe'),
-(7, 1, 5, ''),
-(7, 2, 5, ''),
-(7, 3, 5, ''),
-(7, 4, 5, ''),
-(7, 5, 5, ''),
-(7, 6, 5, ''),
-(7, 7, 5, ''),
-(7, 8, 5, ''),
-(7, 9, 5, ''),
-(7, 10, 5, ''),
-(7, 11, 5, ''),
-(7, 12, 5, ''),
-(7, 13, 5, ''),
-(7, 14, 5, ''),
-(7, 15, 5, ''),
-(7, 16, 5, ''),
-(7, 17, 5, ''),
-(7, 18, 5, ''),
-(7, 19, 5, ''),
-(7, 20, 5, ''),
-(8, 1, 5, 'rshrtrwt'),
-(8, 2, 5, 'rshrtrwt'),
-(8, 3, 5, 'rshrtrwt'),
-(8, 4, 5, 'rshrtrwt'),
-(8, 5, 5, 'rshrtrwt'),
-(8, 6, 5, 'rshrtrwt'),
-(8, 7, 5, 'rshrtrwt'),
-(8, 8, 5, 'rshrtrwt'),
-(8, 9, 5, 'rshrtrwt'),
-(8, 10, 5, 'rshrtrwt'),
-(8, 11, 5, 'rshrtrwt'),
-(8, 12, 5, 'rshrtrwt'),
-(8, 13, 5, 'rshrtrwt'),
-(8, 14, 5, 'rshrtrwt'),
-(8, 15, 5, 'rshrtrwt'),
-(8, 16, 5, 'rshrtrwt'),
-(8, 17, 5, 'rshrtrwt'),
-(8, 18, 5, 'rshrtrwt'),
-(8, 19, 5, 'rshrtrwt'),
-(8, 20, 5, 'rshrtrwt');
 
 -- --------------------------------------------------------
 
@@ -286,20 +122,6 @@ CREATE TABLE `evaluation_list` (
   `status` varchar(10) NOT NULL,
   `date_taken` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `evaluation_list`
---
-
-INSERT INTO `evaluation_list` (`evaluation_id`, `academic_id`, `class_id`, `student_id`, `subject_id`, `faculty_id`, `restriction_id`, `status`, `date_taken`) VALUES
-(1, 3, 17, 177, 9, 17, 66, 'pending', '2024-11-12 22:37:10'),
-(2, 3, 17, 177, 8, 18, 65, 'pending', '2024-11-12 22:37:31'),
-(3, 3, 17, 177, 5, 14, 68, 'pending', '2024-11-12 22:37:51'),
-(4, 3, 17, 177, 7, 16, 69, 'pending', '2024-11-12 22:38:13'),
-(5, 3, 17, 177, 6, 15, 67, 'pending', '2024-11-12 22:38:55'),
-(6, 3, 17, 179, 8, 18, 65, 'pending', '2024-11-15 09:59:41'),
-(7, 3, 19, 194, 3, 2, 70, 'pending', '2024-11-15 21:50:29'),
-(8, 3, 19, 194, 4, 2, 71, 'pending', '2024-11-15 22:04:44');
 
 -- --------------------------------------------------------
 
@@ -326,12 +148,7 @@ CREATE TABLE `faculty_list` (
 INSERT INTO `faculty_list` (`id`, `school_id`, `firstname`, `lastname`, `email`, `password`, `avatar`, `date_created`, `position`) VALUES
 (2, '111942434', 'John', 'Ernest', 'ernest@gmail.com', '200820e3227815ed1756a6b531e7e0d2', '1729778340_GX3qegkWUAATr1p.jpg', '2024-08-14 20:19:27', 'Instructor'),
 (12, '12345', 'John', 'Doe', 'john@example.com', '200820e3227815ed1756a6b531e7e0d2', 'no-image-available.png', '2024-10-21 12:45:25', 'Instructor'),
-(13, '12346', 'Jane', 'Smith', 'jane@example.com', '200820e3227815ed1756a6b531e7e0d2', '1729778340_th.jfif', '2024-10-21 12:45:25', 'Instructor'),
-(14, '11946424', 'John Ericson', 'Brigildo', 'JohnBrigildo@gmail.com', '7a9a93b4414feaaa7ff38413d452e68f', '\'\\\'\\\\\\\'\\\\\\\\\\\\\\\'no-image-available.png\\\\\\\\\\\\\\\'\\\\\\\'\\\'\'', '2024-11-11 14:09:26', 'Instructor'),
-(15, '11946423', 'Genevieve ', 'Geralla', 'Genevieve@gmail.com', '5b0f4118df11e7364a6210dea9621696', '\'\\\'\\\\\\\'\\\\\\\\\\\\\\\'no-image-available.png\\\\\\\\\\\\\\\'\\\\\\\'\\\'\'', '2024-11-11 14:09:26', 'Instructor'),
-(16, '11946422', 'Hitchean', 'Lisondra', 'HitcheanLisondra@gmail.com', 'b0661fef9563fbb0c330bd3b7e85e768', '\'\\\'\\\\\\\'\\\\\\\\\\\\\\\'no-image-available.png\\\\\\\\\\\\\\\'\\\\\\\'\\\'\'', '2024-11-11 14:09:26', 'Program ch'),
-(17, '11946421', 'John Rey', 'Cilin', 'JohnCilin@gmail.com', '56284c8f81d2be9fac103e4a4f52eb9f', '\'\\\'\\\\\\\'\\\\\\\\\\\\\\\'no-image-available.png\\\\\\\\\\\\\\\'\\\\\\\'\\\'\'', '2024-11-11 14:09:26', 'Instructor'),
-(18, '11946420', 'Ryan', 'Quiroga', 'RyQuiroga@gmail.com', 'c857c1f4c3fdca8808971eb4ce2dbdde', '\'\\\'\\\\\\\'\\\\\\\\\\\\\\\'no-image-available.png\\\\\\\\\\\\\\\'\\\\\\\'\\\'\'', '2024-11-11 14:09:26', 'Instructor');
+(13, '12346', 'Jane', 'Smith', 'jane@example.com', '200820e3227815ed1756a6b531e7e0d2', '1729778340_th.jfif', '2024-10-21 12:45:25', 'Instructor');
 
 -- --------------------------------------------------------
 
@@ -344,34 +161,45 @@ CREATE TABLE `question_list` (
   `academic_id` int(30) NOT NULL,
   `question` text NOT NULL,
   `order_by` int(30) NOT NULL,
-  `criteria_id` int(30) NOT NULL
+  `criteria_id` int(30) NOT NULL,
+  `staff_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `question_list`
 --
 
-INSERT INTO `question_list` (`id`, `academic_id`, `question`, `order_by`, `criteria_id`) VALUES
-(1, 3, 'The instructor demonstrates a strong knowledge of the subject matter.', 0, 5),
-(2, 3, 'The instructor explains course material clearly and effectively.', 1, 5),
-(3, 3, 'The instructor uses a variety of instructional methods (e.g., discussions, multimedia) to enhance learning.', 2, 5),
-(4, 3, 'The instructor encourages questions and critical thinking during class.', 3, 5),
-(5, 3, 'The instructor provides timely and constructive feedback on assignments and exams.', 4, 5),
-(6, 3, 'The instructor organizes lectures and materials in a logical, understandable way.', 5, 5),
-(7, 3, 'The instructor is effective in engaging students and keeping their attention.', 6, 5),
-(8, 3, 'The instructor sets clear expectations for assignments, tests, and grading.', 7, 5),
-(9, 3, 'The instructor applies fair and consistent grading practices.', 8, 5),
-(10, 3, 'The instructor integrates real-world applications and examples relevant to the subject.\r\n', 9, 5),
-(11, 3, 'The instructor demonstrates respect for all students and promotes a respectful classroom environment.', 10, 7),
-(12, 3, 'The instructor is approachable and available for help outside of class time (e.g., during office hours).', 11, 7),
-(13, 3, 'The instructor manages class time efficiently and starts and ends sessions on time.', 12, 7),
-(14, 3, 'The instructor shows enthusiasm and passion for the subject and teaching.', 13, 7),
-(15, 3, 'The instructor responds to student emails or messages within a reasonable time frame.', 14, 7),
-(16, 3, 'The instructor respects diverse opinions and encourages inclusive participation.', 15, 7),
-(17, 3, 'The instructor provides academic support, encouraging students to meet their potential.', 16, 7),
-(18, 3, 'The instructor is open to feedback and willing to make adjustments to enhance learning.', 17, 7),
-(19, 3, 'The instructor upholds high standards of academic integrity.', 18, 7),
-(20, 3, 'The instructor actively contributes to the academic community (e.g., research, professional development).', 19, 7);
+INSERT INTO `question_list` (`id`, `academic_id`, `question`, `order_by`, `criteria_id`, `staff_id`) VALUES
+(1, 3, 'Sample Question', 0, 1, 0),
+(5, 0, 'Question 101', 0, 1, 0),
+(6, 3, 'Sample 101', 1, 1, 0),
+(8, 3, '324234', 3, 2, 0),
+(10, 3, '213214', 4, 2, 0),
+(13, 3, '213213', 5, 2, 0),
+(14, 3, 'gdfd', 2, 1, 0),
+(15, 3, 'wqeqwe', 6, 1, 0),
+(16, 3, 'Is the instructor punctual for class sessions?', 10, 7, 0),
+(17, 3, 'How well does the instructor explain complex concepts?', 0, 5, 0),
+(18, 3, 'Does the instructor make the course material engaging?', 1, 5, 0),
+(19, 3, 'How effectively does the instructor use examples and illustrations?', 2, 5, 0),
+(20, 3, 'Is the instructor approachable for questions and assistance?', 3, 5, 0),
+(21, 3, 'How well does the instructor encourage student participation?', 4, 5, 0),
+(22, 3, 'Does the instructor provide timely feedback on assignments and exams?', 5, 5, 0),
+(23, 3, 'How clearly does the instructor outline the course objectives?', 6, 5, 0),
+(24, 3, 'Does the instructor manage classroom time effectively?', 7, 5, 0),
+(25, 3, 'How well does the instructor demonstrate knowledge of the subject matter?', 8, 5, 0),
+(26, 3, 'Does the instructor encourage critical thinking and problem-solving?', 9, 5, 0),
+(27, 3, 'Does the instructor treat students with respect and fairness?', 11, 7, 0),
+(28, 3, 'How well does the instructor manage disruptions in the classroom?', 12, 7, 0),
+(29, 3, 'Does the instructor create an inclusive and welcoming environment?', 13, 7, 0),
+(30, 3, 'How effectively does the instructor handle student concerns and complaints?', 14, 7, 0),
+(31, 3, 'Does the instructor exhibit enthusiasm and passion for teaching?', 15, 7, 0),
+(32, 3, 'Is the instructor organized in presenting lectures and materials?', 16, 7, 0),
+(33, 3, 'Does the instructor maintain a professional demeanor at all times?', 17, 7, 0),
+(34, 3, 'How well does the instructor adapt to different learning styles?', 18, 7, 0),
+(35, 3, 'Does the instructor communicate course policies and expectations clearly?', 19, 7, 0),
+(36, 2, 'wqrewqrer', 0, 5, 0),
+(37, 2, 'erewrewr', 1, 7, 0);
 
 -- --------------------------------------------------------
 
@@ -400,14 +228,36 @@ INSERT INTO `restriction_list` (`id`, `academic_id`, `faculty_id`, `class_id`, `
 (56, 3, 2, 13, 4),
 (57, 3, 2, 13, 3),
 (58, 3, 2, 13, 1),
-(61, 3, 12, 14, 5),
-(65, 3, 18, 17, 8),
-(66, 3, 17, 17, 9),
-(67, 3, 15, 17, 6),
-(68, 3, 14, 17, 5),
-(69, 3, 16, 17, 7),
-(70, 3, 2, 19, 3),
-(71, 3, 2, 19, 4);
+(59, 3, 2, 14, 1),
+(60, 3, 2, 14, 3),
+(61, 3, 12, 14, 5);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `staff_list`
+--
+
+CREATE TABLE `staff_list` (
+  `id` int(11) NOT NULL,
+  `staff_id` varchar(50) NOT NULL,
+  `firstname` varchar(100) NOT NULL,
+  `lastname` varchar(100) NOT NULL,
+  `avatar` varchar(255) DEFAULT NULL,
+  `email` varchar(150) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `staff_list`
+--
+
+INSERT INTO `staff_list` (`id`, `staff_id`, `firstname`, `lastname`, `avatar`, `email`, `password`, `created_at`, `updated_at`) VALUES
+(2, '3242352345', 'Luka', 'Doncic', 'staff-1724116806.png', 'lukaDoncic@gmail.com', '$2y$10$xlHphrco6.TznqtWIVef7O0HD9.RE1RJmmjbc10WPel0t06MkNH22', '2024-08-20 01:20:06', '2024-08-20 01:20:06'),
+(3, '214324345643', 'Kyrie ', 'Irving', 'staff-1724161513.jfif', 'kyrieIrve@gmail.com', '$2y$10$yF44adflYZsDPhJdBfD63.L0dkGjNydqLESvzbN32TrYNfQH.QMYC', '2024-08-20 13:45:13', '2024-08-20 13:45:13'),
+(4, '1324325412', 'Lebron', 'James', 'staff-1724382854.jfif', 'lebron@gmail.com', '$2y$10$WhRi0eMiqN45p2QG18WWGeIaLCxrY0jTntmj/pxR4CddiFRGOW5me', '2024-08-23 03:14:14', '2024-08-23 03:14:14');
 
 -- --------------------------------------------------------
 
@@ -433,36 +283,25 @@ CREATE TABLE `student_list` (
 --
 
 INSERT INTO `student_list` (`id`, `school_id`, `firstname`, `lastname`, `email`, `password`, `class_id`, `avatar`, `date_created`, `status`) VALUES
-(162, '1118990', ' Ariel', 'Abellana ', 'Abellana@gmail.com', 'd12245ff37cad48c28506ddc383a1f95', 17, 'no-image-available.png', '2024-11-12 21:14:26', 'active'),
-(163, '1118989', 'Baby John', 'Acidillo ', 'bbyJ@gmail.com', '4b40879a4e51a13e4caad0c0e8568605', 17, 'no-image-available.png', '2024-11-12 21:14:26', 'active'),
-(164, '1118988', 'Christel Mae', 'Abellana ', 'Ariellana@gmail.com', 'd12245ff37cad48c28506ddc383a1f95', 17, 'no-image-available.png', '2024-11-12 21:14:26', 'active'),
-(165, '1118987', 'Christine', 'Bendanillo', 'istineBenda@gmail.com', '40fc3e3dd906a2fee064a67e732f1f56', 17, 'no-image-available.png', '2024-11-12 21:14:26', 'active'),
-(166, '1118986', 'Rodel', 'Celis', 'Celis@gmail.com', '4e539a31e99472ee31dd928fe2b5b43d', 17, 'no-image-available.png', '2024-11-12 21:14:26', 'active'),
-(167, '1118985', 'Sarah', 'Caminos', 'SarahP@gmail.com', '7fec9db48d3aa3b840b71a294171eb4d', 17, 'no-image-available.png', '2024-11-12 21:14:26', 'active'),
-(168, '1118984', 'Christian', 'Canono', 'Canono21@gmail.com', '5af6b59f9f9fa9f20a9523f55f6ad2b1', 17, 'no-image-available.png', '2024-11-12 21:14:26', 'active'),
-(169, '1118983', 'Sweet Venice', 'Casia', 'Casia21@gmail.com', '6a2570eb695b4678b77e2d07a50d0996', 17, 'no-image-available.png', '2024-11-12 21:14:26', 'active'),
-(170, '1118982', 'Caryll Jean', 'Deiparine', 'Deiparine21@gmail.com', '54bf73c5bee6bb09fe101b03209623a0', 17, 'no-image-available.png', '2024-11-12 21:14:26', 'active'),
-(171, '1118981', 'Angel', 'Gabutero', 'Gabutero21@gmail.com', '5e15fa5b787fb86a681db740e825050b', 17, 'no-image-available.png', '2024-11-12 21:14:26', 'active'),
-(172, '1118980', 'Ryle Aeron', 'Delicano', 'Delicano21@gmail.com', '0d7c1ac69512ac6d44ee20b8fd201f3f', 17, 'no-image-available.png', '2024-11-12 21:14:26', 'active'),
-(173, '1118979', 'Darla Kayla', 'Ipon', 'Ipon21@gmail.com', 'aa35d492374eeff6aca2eba2d60b867e', 17, 'no-image-available.png', '2024-11-12 21:14:26', 'active'),
-(174, '1118978', 'Kyle', 'Isidoro', 'Isidoro21@gmail.com', '7233e3e786bf5dd82b464d235c8b1c53', 17, 'no-image-available.png', '2024-11-12 21:14:26', 'active'),
-(175, '1118977', 'Justine', 'Labora', 'Labora21@gmail.com', 'a7b6c221627dbba5f172c724347908bb', 17, 'no-image-available.png', '2024-11-12 21:14:26', 'active'),
-(176, '1118976', 'Maria Ana ', 'Lapiz', 'Lapiz21@gmail.com', '65f20d37e89213b9af16e195eab20baf', 17, 'no-image-available.png', '2024-11-12 21:14:26', 'active'),
-(177, '1118975', 'Ryan ky', 'Laroa', 'Laroa21@gmail.com', '5f5fa5ef882c4b5e859174bf778a053d', 17, 'no-image-available.png', '2024-11-12 21:14:26', 'active'),
-(178, '1118974', 'Cosam John', 'Macua', 'Macua21@gmail.com', '66eeedf31b7faba1cafa9d7cd9ec8b39', 17, 'no-image-available.png', '2024-11-12 21:14:26', 'active'),
-(179, '1118973', 'Junmark', 'Omambac', 'Omambac21@gmail.com', 'bd62a361e411471176d310f4a58ed951', 17, 'no-image-available.png', '2024-11-12 21:14:26', 'active'),
-(180, '1118972', 'Matt Lovell', 'Ortega', 'Ortega21@gmail.com', '6e59674c42d92fa0d083b3642e048833', 17, 'no-image-available.png', '2024-11-12 21:14:26', 'active'),
-(181, '1118971', 'Vhaugn Vincent', 'Padigos', 'Padigos21@gmail.com', '65c0afb642fb3a3a0dd7d59a5fec125b', 17, 'no-image-available.png', '2024-11-12 21:14:26', 'active'),
-(182, '1118970', 'Jeralyn', 'Puerto', 'Puerto21@gmail.com', 'e520dbba188984d143a20f05166156c5', 17, 'no-image-available.png', '2024-11-12 21:14:26', 'active'),
-(183, '1118969', 'Gian Heinrich ', 'Recaña', 'Recaña21@gmail.com', 'df31ec622e1db87930a86fe2a495df25', 17, 'no-image-available.png', '2024-11-12 21:14:26', 'active'),
-(184, '1118968', 'Bernadette', 'Requinto', 'Requinto21@gmail.com', '6c56c8f7aa28eb9b9a84b8e80d09f696', 17, 'no-image-available.png', '2024-11-12 21:14:26', 'active'),
-(185, '1118967', 'Edgardo', 'Siton', 'Siton21@gmail.com', '18fe94952c5a7c176f9af08dd9e4e9d9', 17, 'no-image-available.png', '2024-11-12 21:14:26', 'active'),
-(186, '1118966', 'Judy', 'Tapere', 'Tapere21@gmail.com', 'a9743726ddefaecec077bb61144f201b', 17, 'no-image-available.png', '2024-11-12 21:14:26', 'active'),
-(187, '1118965', 'Sherwin', 'Torrejas', 'Torrejas21@gmail.com', '4cb40edd622d815a77f3ea6d9056dd7f', 17, 'no-image-available.png', '2024-11-12 21:14:26', 'active'),
-(188, '1118964', 'Jose Nathaniel', 'Ubas', 'Ubas21@gmail.com', 'c24a310d12620340fa3d5632b876f5be', 17, 'no-image-available.png', '2024-11-12 21:14:26', 'active'),
-(189, '1118963', 'Aeron', 'Villafuerte', 'Villafuerte21@gmail.com', '1c42da6c924532d6bc90362ab984a74a', 17, 'no-image-available.png', '2024-11-12 21:14:26', 'active'),
-(190, '1118962', 'Arthur', 'Villareal', 'Villareal21@gmail.com', '2e3e52564eec2066a11265d032a7235b', 17, 'no-image-available.png', '2024-11-12 21:14:26', 'active'),
-(194, '1114324', 'christian', 'Bastida', 'chan@gmail.com', '9f7b4eebeaba56f7e6d89277f50af00c', 19, 'no-image-available.png', '2024-11-15 21:45:27', 'active');
+(1, '202101', 'John', 'Doe', 'john.doe@example.com', '816b09aa255516ec745de7b215e2e158', 6, 'no-image-available.png', '2024-10-29 11:05:00', ''),
+(19, '45661191', 'Michael', 'Davis', 'michael.davis@example.com', '61937f272034e83c0e80c1cb9f35f7ec', 13, 'no-image-available.png', '2024-11-06 20:47:55', 'Active'),
+(21, '22513371', 'Michael', 'Johnson', 'michael.johnson@example.com', '63965404e168c23a0723af1ce84c5d32', 13, 'no-image-available.png', '2024-11-06 20:47:55', 'Active'),
+(22, '58865211', 'Emily', 'Johnson', 'emily.johnson@mail.com', '170e27760078ebb175f8e9bfeb9e7c01', 13, 'no-image-available.png', '2024-11-06 20:47:55', 'active'),
+(23, '38490038', 'Sarah', 'Martinez', 'sarah.martinez@mail.com', '5875185af781ee32312304bfe011c8d2', 13, 'no-image-available.png', '2024-11-06 20:47:55', 'active'),
+(24, '69397243', 'Michael', 'Johnson', 'michael.johnson@mail.com', 'c2bb8041131359eb7ef3cd4ad1c4f1cd', 13, 'no-image-available.png', '2024-11-06 20:47:55', 'active'),
+(25, '31595635', 'Jane', 'Brown', 'jane.brown@example.com', '51f7fb9e8aafc81d79a33127305eea33', 13, 'no-image-available.png', '2024-11-06 20:47:55', 'active'),
+(50, '45661191', 'Gian', 'Recana', 'michael.davis@example.com', '6ab0ef0ef5c3148cb7cdb03c34d0a682', 2, 'no-image-available.png', '2024-11-08 16:52:57', 'active'),
+(51, '35655754', 'Angel', 'Gabutero', 'chris.brown@mail.com', '5e15fa5b787fb86a681db740e825050b', 2, 'no-image-available.png', '2024-11-08 16:52:57', 'active'),
+(52, '22513371', 'Michael', 'Johnson', 'michael.johnson@example.com', '3228635b89112e2c641f5e5cc44e19fe', 2, 'no-image-available.png', '2024-11-08 16:52:57', 'active'),
+(53, '58865211', 'Emily', 'Johnson', 'emily.johnson@mail.com', '3228635b89112e2c641f5e5cc44e19fe', 2, 'no-image-available.png', '2024-11-08 16:52:57', 'active'),
+(55, '69397243', 'Michael', 'Johnson', 'michael.johnson@mail.com', '3228635b89112e2c641f5e5cc44e19fe', 2, 'no-image-available.png', '2024-11-08 16:52:57', 'active'),
+(56, '31595635', 'Jane', 'Brown', 'jane.brown@example.com', 'ed63fc91500594c3086714f86b3001e4', 2, 'no-image-available.png', '2024-11-08 16:52:57', 'active'),
+(57, '2310226', 'Anna', 'Garcia', 'annagarcia@gmail.com', '200820e3227815ed1756a6b531e7e0d2', 14, 'no-image-available.png', '2024-11-08 16:52:57', 'Active'),
+(58, '53566720', 'Jane', 'Johnson', 'janson@gmail.com', '200820e3227815ed1756a6b531e7e0d2', 2, 'no-image-available.png', '2024-11-08 16:52:57', 'Active'),
+(68, '53566720', 'Jane', 'Johnson', 'jane.johnson@mail.com', 'd41d8cd98f00b204e9800998ecf8427e', 14, 'no-image-available.png', '2024-11-09 11:03:22', 'active'),
+(69, '2034321', 'Caryl Jade', 'Cano', 'cano.doe@example.com', '7c6a180b36896a0a8c02787eeafb0e4c', 14, 'no-image-available.png', '2024-11-09 11:05:06', 'active'),
+(70, '2543502', 'Ogie', 'Obcial', 'ObcialG@gmail.com', '6cb75f652a9b52798eb6cf2201057c73', 14, 'no-image-available.png', '2024-11-09 11:05:06', 'active'),
+(71, '1342103', 'Teves', 'Ted Anthony', 'tedteves@gmail.com', '819b0643d6b89dc9b579fdfc9094f28e', 14, 'no-image-available.png', '2024-11-09 11:05:06', 'active');
 
 -- --------------------------------------------------------
 
@@ -487,11 +326,7 @@ INSERT INTO `subject_list` (`id`, `code`, `subject`, `description`) VALUES
 (2, 'ENG-101', 'English', 'English'),
 (3, 'CC-102', 'COMPUTER PROGRAMMING 1', 'COMPUTER PROGRAMMING 1'),
 (4, 'MATH-204', 'GENMATH', 'GENMATH'),
-(5, 'CAP-401', 'CAPSTONE PROJECT 2', 'CAPSTONE PROJECT 2'),
-(6, 'IT-402', 'FREE ELECTIVE', 'FREE ELECTIVE'),
-(7, 'SP-403', 'SOCIAL AND PROFESSIONAL ISSUES', 'SOCIAL AND PROFESSIONAL ISSUES'),
-(8, 'IT-404', 'SEMINAR IN IT TRENDS/UPDATES', 'SEMINAR IN IT TRENDS/UPDATES-ELECTIVE\r\n'),
-(9, 'SA-405', 'SYSTEM ADMINISTRATOR AND MAINTENANCE', 'SYSTEM ADMINISTRATOR AND MAINTENANCE');
+(5, 'FIl', 'Filipipino', 'ewrwqe');
 
 -- --------------------------------------------------------
 
@@ -515,13 +350,8 @@ INSERT INTO `subject_teacher` (`id`, `subject_id`, `faculty_id`, `academic_year`
 (25, 1, 2, 3),
 (35, 4, 12, 3),
 (36, 4, 2, 3),
-(40, 3, 12, 3),
-(41, 3, 2, 3),
-(51, 8, 18, 3),
-(52, 7, 16, 3),
-(53, 9, 17, 3),
-(54, 5, 14, 3),
-(55, 6, 15, 3);
+(38, 5, 12, 3),
+(39, 5, 2, 3);
 
 -- --------------------------------------------------------
 
@@ -530,20 +360,20 @@ INSERT INTO `subject_teacher` (`id`, `subject_id`, `faculty_id`, `academic_year`
 --
 
 CREATE TABLE `system_settings` (
-  `id` int(11) NOT NULL,
+  `id` int(30) NOT NULL,
   `name` text NOT NULL,
-  `email` varchar(10) NOT NULL,
+  `email` varchar(200) NOT NULL,
   `contact` varchar(20) NOT NULL,
-  `Address` varchar(20) NOT NULL,
-  `cover` text NOT NULL
+  `address` text NOT NULL,
+  `cover_img` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `system_settings`
 --
 
-INSERT INTO `system_settings` (`id`, `name`, `email`, `contact`, `Address`, `cover`) VALUES
-(1, 'Faculty Evaluation System', 'info@sampl', '09994714498', 'Cuanos,Minglanilla,C', '');
+INSERT INTO `system_settings` (`id`, `name`, `email`, `contact`, `address`, `cover_img`) VALUES
+(1, 'Faculty Evaluation System', 'info@sample.comm', '+6948 8542 623', '2102  Caldwell Road, Rochester, New York, 14608', '');
 
 -- --------------------------------------------------------
 
@@ -591,19 +421,12 @@ ALTER TABLE `criteria_list`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `evaluation_answers`
---
-ALTER TABLE `evaluation_answers`
-  ADD KEY `question_id` (`question_id`);
-
---
 -- Indexes for table `evaluation_list`
 --
 ALTER TABLE `evaluation_list`
   ADD PRIMARY KEY (`evaluation_id`),
   ADD KEY `student_id` (`student_id`),
-  ADD KEY `faculty_id` (`faculty_id`),
-  ADD KEY `restriction_id` (`restriction_id`);
+  ADD KEY `faculty_id` (`faculty_id`);
 
 --
 -- Indexes for table `faculty_list`
@@ -615,8 +438,7 @@ ALTER TABLE `faculty_list`
 -- Indexes for table `question_list`
 --
 ALTER TABLE `question_list`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `criteria_id` (`criteria_id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `restriction_list`
@@ -625,11 +447,18 @@ ALTER TABLE `restriction_list`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `staff_list`
+--
+ALTER TABLE `staff_list`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `staff_id` (`staff_id`),
+  ADD UNIQUE KEY `email` (`email`);
+
+--
 -- Indexes for table `student_list`
 --
 ALTER TABLE `student_list`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `class_id` (`class_id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `subject_list`
@@ -672,55 +501,30 @@ ALTER TABLE `academic_list`
 -- AUTO_INCREMENT for table `class_list`
 --
 ALTER TABLE `class_list`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `student_list`
 --
 ALTER TABLE `student_list`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=195;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
 
 --
 -- AUTO_INCREMENT for table `subject_teacher`
 --
 ALTER TABLE `subject_teacher`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
-
---
--- AUTO_INCREMENT for table `system_settings`
---
-ALTER TABLE `system_settings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- Constraints for dumped tables
 --
 
 --
--- Constraints for table `evaluation_answers`
---
-ALTER TABLE `evaluation_answers`
-  ADD CONSTRAINT `evaluation_answers_ibfk_1` FOREIGN KEY (`question_id`) REFERENCES `question_list` (`id`);
-
---
 -- Constraints for table `evaluation_list`
 --
 ALTER TABLE `evaluation_list`
   ADD CONSTRAINT `evaluation_list_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `student_list` (`id`),
-  ADD CONSTRAINT `evaluation_list_ibfk_2` FOREIGN KEY (`faculty_id`) REFERENCES `faculty_list` (`id`),
-  ADD CONSTRAINT `evaluation_list_ibfk_3` FOREIGN KEY (`restriction_id`) REFERENCES `restriction_list` (`id`);
-
---
--- Constraints for table `question_list`
---
-ALTER TABLE `question_list`
-  ADD CONSTRAINT `question_list_ibfk_1` FOREIGN KEY (`criteria_id`) REFERENCES `criteria_list` (`id`);
-
---
--- Constraints for table `student_list`
---
-ALTER TABLE `student_list`
-  ADD CONSTRAINT `student_list_ibfk_1` FOREIGN KEY (`class_id`) REFERENCES `class_list` (`id`);
+  ADD CONSTRAINT `evaluation_list_ibfk_2` FOREIGN KEY (`faculty_id`) REFERENCES `faculty_list` (`id`);
 
 --
 -- Constraints for table `subject_teacher`

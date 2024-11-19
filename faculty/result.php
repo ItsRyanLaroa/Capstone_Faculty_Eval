@@ -1,4 +1,4 @@
-<?php $faculty_id = $_SESSION['login_id'] ?>
+    <?php $faculty_id = $_SESSION['login_id'] ?>
 <?php 
 function ordinal_suffix($num){
     $num = $num % 100;
@@ -12,6 +12,26 @@ function ordinal_suffix($num){
     return $num.'th';
 }
 ?>
+
+<style>
+    .bg-gradient-secondary {
+    background: #B31B1C linear-gradient(182deg, #b31b1b, #dc3545) repeat-x !important;
+    color: #fff;
+}
+
+.bg-gradient-success {
+    border: #9b0a1e !important;
+    background: #9b0a1e !important;
+    color: #fff;
+}
+
+    .callout.callout-info{
+    border-left-color: #9b0a1e !important;
+}
+.border-info {
+    border-color: #9b0a1e !important;
+}
+</style>
 
 <div class="col-lg-12">
     <div class="row">

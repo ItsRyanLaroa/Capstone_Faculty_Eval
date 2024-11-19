@@ -52,45 +52,137 @@ $restriction = $conn->query("
     .card-info.card-outline {
         border-top: 3px solid #9b0a1e !important;
     }
-    
+
     .border-info {
         border-color: #dc143c !important;
         margin-bottom: 20px;
         margin-top: 20px;
     }
 
-    
+    .bg-gradient-secondary {
+        background: #007bff !important;
+        color: #fff;
+    }
+
+   .evaluated {
+    color: white; 
+    cursor: not-allowed; 
+    pointer-events: none; /* Disables any interaction with the element */
+    user-select: none; /* Prevents text selection */
+}
+
+.evaluated .badge {
+    cursor: not-allowed;
+}
+
+.evaluated input[type="radio"] {
+    pointer-events: none; /* Disables radio buttons */
+}
+
+.evaluated label {
+    pointer-events: none; /* Prevents clicking on the label */
+}
+
+.evaluated:hover {
+    background-color: transparent; /* Prevents hover effect */
+}
+
+    .evaluated { color: white; cursor: not-allowed; } .evaluated .badge { cursor: not-allowed; }
+
     .bg-gradient-secondary {
     background: #9b0a1e !important;
     color: #fff;
 }
-    .evaluated {
-        color: white; 
-        cursor: not-allowed; 
-        pointer-events: none;
-        user-select: none;
+
+@media(max-width: 540px){
+    .card{
+        margin-top: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .card-body table {
+        font-size: 12px;
     }
 
-    .evaluated .badge {
-        cursor: not-allowed;
+    .card-body table th, 
+    .card-body table td {
+        padding: 4px;
     }
 
-    .evaluated input[type="radio"] {
-        pointer-events: none;
+    .card-body table th {
+        font-size: 10px;
     }
 
-    .evaluated label {
-        pointer-events: none;
+    .card-body table td {
+        font-size: 10px;
     }
 
-    .evaluated:hover {
-        background-color: transparent;
+	.card-body table tr{
+		font-size: 10px;
+	}
+
+    .card-body table .icheck-success {
+        font-size: 10px;
     }
+
+    .card-body {
+        overflow-x: auto;
+    }
+
+    .card-body table {
+        width: 100%;
+        table-layout: fixed;
+    }
+
+}
+
+@media (max-width: 480px) {
+
+    .col-md-8 .card-header {
+        font-size: 14px;
+        padding: 8px 10px;
+    }
+
+	.col-md-8 .card-header .card-tools {
+		margin-top: 5px;
+		margin-right: 5px;
+    }
+
+    .col-md-8 .card-header b {
+        font-size: 14px;
+    }
+
+
+    .col-md-8 .card-header .card-tools button {
+        font-size: 12px;
+        padding: 5px 8px;
+    }
+    
+
+    .col-md-8 .card-body {
+        padding: 10px;
+    }
+
+	.col-md-8 .card-body fieldset {
+        border: 1px solid #ddd;
+        padding: 10px;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+
+
+    .col-md-8 .card-body fieldset legend {
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 8px; 
+    }
+}
+
 </style>
-
 <div class="col-lg-12">
     <div class="row">
-        <div class="col-md-3">
+    <div class="col-md-3" style="margin-bottom:20px;" >
             <div class="list-group">
                 <?php 
                 $displayed_ids = []; // Array to track displayed IDs

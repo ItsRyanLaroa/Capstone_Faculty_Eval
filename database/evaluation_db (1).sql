@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 15, 2024 at 04:01 PM
+-- Generation Time: Nov 12, 2024 at 03:48 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -66,9 +66,9 @@ CREATE TABLE `class_list` (
 
 INSERT INTO `class_list` (`id`, `curriculum`, `level`, `section`, `class_code`, `faculty_id`, `subject_id`) VALUES
 (10, 'BSCRIM', '2', 'D', 'VKfNuQaW', '2', '1,3'),
+(11, 'BEED', '1', 'D', 'qto2azGY', '2', '1,3'),
 (13, 'BSBA', '4', 'A', 'Z8vwg93A', '2', '1,3,4'),
-(17, 'BSIT', '4', 'C', 'gN1xmbC7', '14,15,16,17,18', '5,9,6,7,8'),
-(19, 'BEED', '2', 'D', 'zd24DTNK', '2', '1,4,3');
+(17, 'BSIT', '4', 'C', 'gN1xmbC7', '14,15,16,17,18', '5,9,6,7,8');
 
 -- --------------------------------------------------------
 
@@ -99,175 +99,114 @@ INSERT INTO `criteria_list` (`id`, `criteria`, `order_by`) VALUES
 CREATE TABLE `evaluation_answers` (
   `evaluation_id` int(30) NOT NULL,
   `question_id` int(30) NOT NULL,
-  `rate` int(20) NOT NULL,
-  `feedback` varchar(255) DEFAULT NULL
+  `rate` int(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `evaluation_answers`
 --
 
-INSERT INTO `evaluation_answers` (`evaluation_id`, `question_id`, `rate`, `feedback`) VALUES
-(1, 1, 5, NULL),
-(1, 2, 5, NULL),
-(1, 3, 5, NULL),
-(1, 4, 5, NULL),
-(1, 5, 5, NULL),
-(1, 6, 5, NULL),
-(1, 7, 5, NULL),
-(1, 8, 5, NULL),
-(1, 9, 5, NULL),
-(1, 10, 5, NULL),
-(1, 11, 5, NULL),
-(1, 12, 5, NULL),
-(1, 13, 5, NULL),
-(1, 14, 5, NULL),
-(1, 15, 5, NULL),
-(1, 16, 5, NULL),
-(1, 17, 5, NULL),
-(1, 18, 5, NULL),
-(1, 19, 5, NULL),
-(1, 20, 5, NULL),
-(2, 1, 5, NULL),
-(2, 2, 5, NULL),
-(2, 3, 5, NULL),
-(2, 4, 5, NULL),
-(2, 5, 5, NULL),
-(2, 6, 5, NULL),
-(2, 7, 5, NULL),
-(2, 8, 5, NULL),
-(2, 9, 5, NULL),
-(2, 10, 5, NULL),
-(2, 11, 5, NULL),
-(2, 12, 5, NULL),
-(2, 13, 5, NULL),
-(2, 14, 5, NULL),
-(2, 15, 5, NULL),
-(2, 16, 5, NULL),
-(2, 17, 5, NULL),
-(2, 18, 5, NULL),
-(2, 19, 5, NULL),
-(2, 20, 5, NULL),
-(3, 1, 5, NULL),
-(3, 2, 5, NULL),
-(3, 3, 5, NULL),
-(3, 4, 5, NULL),
-(3, 5, 5, NULL),
-(3, 6, 5, NULL),
-(3, 7, 5, NULL),
-(3, 8, 5, NULL),
-(3, 9, 5, NULL),
-(3, 10, 5, NULL),
-(3, 11, 5, NULL),
-(3, 12, 5, NULL),
-(3, 13, 5, NULL),
-(3, 14, 5, NULL),
-(3, 15, 5, NULL),
-(3, 16, 5, NULL),
-(3, 17, 5, NULL),
-(3, 18, 5, NULL),
-(3, 19, 5, NULL),
-(3, 20, 5, NULL),
-(4, 1, 5, NULL),
-(4, 2, 5, NULL),
-(4, 3, 5, NULL),
-(4, 4, 5, NULL),
-(4, 5, 5, NULL),
-(4, 6, 5, NULL),
-(4, 7, 5, NULL),
-(4, 8, 5, NULL),
-(4, 9, 5, NULL),
-(4, 10, 5, NULL),
-(4, 11, 5, NULL),
-(4, 12, 5, NULL),
-(4, 13, 5, NULL),
-(4, 14, 5, NULL),
-(4, 15, 5, NULL),
-(4, 16, 5, NULL),
-(4, 17, 5, NULL),
-(4, 18, 5, NULL),
-(4, 19, 5, NULL),
-(4, 20, 5, NULL),
-(5, 1, 5, NULL),
-(5, 2, 5, NULL),
-(5, 3, 5, NULL),
-(5, 4, 5, NULL),
-(5, 5, 5, NULL),
-(5, 6, 5, NULL),
-(5, 7, 5, NULL),
-(5, 8, 5, NULL),
-(5, 9, 5, NULL),
-(5, 10, 5, NULL),
-(5, 11, 5, NULL),
-(5, 12, 5, NULL),
-(5, 13, 5, NULL),
-(5, 14, 5, NULL),
-(5, 15, 5, NULL),
-(5, 16, 5, NULL),
-(5, 17, 5, NULL),
-(5, 18, 5, NULL),
-(5, 19, 5, NULL),
-(5, 20, 5, NULL),
-(6, 1, 5, 'saewqe'),
-(6, 2, 5, 'saewqe'),
-(6, 3, 5, 'saewqe'),
-(6, 4, 5, 'saewqe'),
-(6, 5, 5, 'saewqe'),
-(6, 6, 5, 'saewqe'),
-(6, 7, 5, 'saewqe'),
-(6, 8, 5, 'saewqe'),
-(6, 9, 5, 'saewqe'),
-(6, 10, 5, 'saewqe'),
-(6, 11, 5, 'saewqe'),
-(6, 12, 5, 'saewqe'),
-(6, 13, 5, 'saewqe'),
-(6, 14, 5, 'saewqe'),
-(6, 15, 5, 'saewqe'),
-(6, 16, 5, 'saewqe'),
-(6, 17, 5, 'saewqe'),
-(6, 18, 5, 'saewqe'),
-(6, 19, 5, 'saewqe'),
-(6, 20, 5, 'saewqe'),
-(7, 1, 5, ''),
-(7, 2, 5, ''),
-(7, 3, 5, ''),
-(7, 4, 5, ''),
-(7, 5, 5, ''),
-(7, 6, 5, ''),
-(7, 7, 5, ''),
-(7, 8, 5, ''),
-(7, 9, 5, ''),
-(7, 10, 5, ''),
-(7, 11, 5, ''),
-(7, 12, 5, ''),
-(7, 13, 5, ''),
-(7, 14, 5, ''),
-(7, 15, 5, ''),
-(7, 16, 5, ''),
-(7, 17, 5, ''),
-(7, 18, 5, ''),
-(7, 19, 5, ''),
-(7, 20, 5, ''),
-(8, 1, 5, 'rshrtrwt'),
-(8, 2, 5, 'rshrtrwt'),
-(8, 3, 5, 'rshrtrwt'),
-(8, 4, 5, 'rshrtrwt'),
-(8, 5, 5, 'rshrtrwt'),
-(8, 6, 5, 'rshrtrwt'),
-(8, 7, 5, 'rshrtrwt'),
-(8, 8, 5, 'rshrtrwt'),
-(8, 9, 5, 'rshrtrwt'),
-(8, 10, 5, 'rshrtrwt'),
-(8, 11, 5, 'rshrtrwt'),
-(8, 12, 5, 'rshrtrwt'),
-(8, 13, 5, 'rshrtrwt'),
-(8, 14, 5, 'rshrtrwt'),
-(8, 15, 5, 'rshrtrwt'),
-(8, 16, 5, 'rshrtrwt'),
-(8, 17, 5, 'rshrtrwt'),
-(8, 18, 5, 'rshrtrwt'),
-(8, 19, 5, 'rshrtrwt'),
-(8, 20, 5, 'rshrtrwt');
+INSERT INTO `evaluation_answers` (`evaluation_id`, `question_id`, `rate`) VALUES
+(1, 1, 5),
+(1, 2, 5),
+(1, 3, 5),
+(1, 4, 5),
+(1, 5, 5),
+(1, 6, 5),
+(1, 7, 5),
+(1, 8, 5),
+(1, 9, 5),
+(1, 10, 5),
+(1, 11, 5),
+(1, 12, 5),
+(1, 13, 5),
+(1, 14, 5),
+(1, 15, 5),
+(1, 16, 5),
+(1, 17, 5),
+(1, 18, 5),
+(1, 19, 5),
+(1, 20, 5),
+(2, 1, 5),
+(2, 2, 5),
+(2, 3, 5),
+(2, 4, 5),
+(2, 5, 5),
+(2, 6, 5),
+(2, 7, 5),
+(2, 8, 5),
+(2, 9, 5),
+(2, 10, 5),
+(2, 11, 5),
+(2, 12, 5),
+(2, 13, 5),
+(2, 14, 5),
+(2, 15, 5),
+(2, 16, 5),
+(2, 17, 5),
+(2, 18, 5),
+(2, 19, 5),
+(2, 20, 5),
+(3, 1, 5),
+(3, 2, 5),
+(3, 3, 5),
+(3, 4, 5),
+(3, 5, 5),
+(3, 6, 5),
+(3, 7, 5),
+(3, 8, 5),
+(3, 9, 5),
+(3, 10, 5),
+(3, 11, 5),
+(3, 12, 5),
+(3, 13, 5),
+(3, 14, 5),
+(3, 15, 5),
+(3, 16, 5),
+(3, 17, 5),
+(3, 18, 5),
+(3, 19, 5),
+(3, 20, 5),
+(4, 1, 5),
+(4, 2, 5),
+(4, 3, 5),
+(4, 4, 5),
+(4, 5, 5),
+(4, 6, 5),
+(4, 7, 5),
+(4, 8, 5),
+(4, 9, 5),
+(4, 10, 5),
+(4, 11, 5),
+(4, 12, 5),
+(4, 13, 5),
+(4, 14, 5),
+(4, 15, 5),
+(4, 16, 5),
+(4, 17, 5),
+(4, 18, 5),
+(4, 19, 5),
+(4, 20, 5),
+(5, 1, 5),
+(5, 2, 5),
+(5, 3, 5),
+(5, 4, 5),
+(5, 5, 5),
+(5, 6, 5),
+(5, 7, 5),
+(5, 8, 5),
+(5, 9, 5),
+(5, 10, 5),
+(5, 11, 5),
+(5, 12, 5),
+(5, 13, 5),
+(5, 14, 5),
+(5, 15, 5),
+(5, 16, 5),
+(5, 17, 5),
+(5, 18, 5),
+(5, 19, 5),
+(5, 20, 5);
 
 -- --------------------------------------------------------
 
@@ -296,10 +235,7 @@ INSERT INTO `evaluation_list` (`evaluation_id`, `academic_id`, `class_id`, `stud
 (2, 3, 17, 177, 8, 18, 65, 'pending', '2024-11-12 22:37:31'),
 (3, 3, 17, 177, 5, 14, 68, 'pending', '2024-11-12 22:37:51'),
 (4, 3, 17, 177, 7, 16, 69, 'pending', '2024-11-12 22:38:13'),
-(5, 3, 17, 177, 6, 15, 67, 'pending', '2024-11-12 22:38:55'),
-(6, 3, 17, 179, 8, 18, 65, 'pending', '2024-11-15 09:59:41'),
-(7, 3, 19, 194, 3, 2, 70, 'pending', '2024-11-15 21:50:29'),
-(8, 3, 19, 194, 4, 2, 71, 'pending', '2024-11-15 22:04:44');
+(5, 3, 17, 177, 6, 15, 67, 'pending', '2024-11-12 22:38:55');
 
 -- --------------------------------------------------------
 
@@ -405,9 +341,7 @@ INSERT INTO `restriction_list` (`id`, `academic_id`, `faculty_id`, `class_id`, `
 (66, 3, 17, 17, 9),
 (67, 3, 15, 17, 6),
 (68, 3, 14, 17, 5),
-(69, 3, 16, 17, 7),
-(70, 3, 2, 19, 3),
-(71, 3, 2, 19, 4);
+(69, 3, 16, 17, 7);
 
 -- --------------------------------------------------------
 
@@ -433,6 +367,7 @@ CREATE TABLE `student_list` (
 --
 
 INSERT INTO `student_list` (`id`, `school_id`, `firstname`, `lastname`, `email`, `password`, `class_id`, `avatar`, `date_created`, `status`) VALUES
+(161, '11194', 'John', 'data', 'data@example.com', '327bc4e22b649d47c4546a3ec93f376b', 11, '1731416220_th.jfif', '2024-11-12 20:57:39', 'Pending'),
 (162, '1118990', ' Ariel', 'Abellana ', 'Abellana@gmail.com', 'd12245ff37cad48c28506ddc383a1f95', 17, 'no-image-available.png', '2024-11-12 21:14:26', 'active'),
 (163, '1118989', 'Baby John', 'Acidillo ', 'bbyJ@gmail.com', '4b40879a4e51a13e4caad0c0e8568605', 17, 'no-image-available.png', '2024-11-12 21:14:26', 'active'),
 (164, '1118988', 'Christel Mae', 'Abellana ', 'Ariellana@gmail.com', 'd12245ff37cad48c28506ddc383a1f95', 17, 'no-image-available.png', '2024-11-12 21:14:26', 'active'),
@@ -461,8 +396,7 @@ INSERT INTO `student_list` (`id`, `school_id`, `firstname`, `lastname`, `email`,
 (187, '1118965', 'Sherwin', 'Torrejas', 'Torrejas21@gmail.com', '4cb40edd622d815a77f3ea6d9056dd7f', 17, 'no-image-available.png', '2024-11-12 21:14:26', 'active'),
 (188, '1118964', 'Jose Nathaniel', 'Ubas', 'Ubas21@gmail.com', 'c24a310d12620340fa3d5632b876f5be', 17, 'no-image-available.png', '2024-11-12 21:14:26', 'active'),
 (189, '1118963', 'Aeron', 'Villafuerte', 'Villafuerte21@gmail.com', '1c42da6c924532d6bc90362ab984a74a', 17, 'no-image-available.png', '2024-11-12 21:14:26', 'active'),
-(190, '1118962', 'Arthur', 'Villareal', 'Villareal21@gmail.com', '2e3e52564eec2066a11265d032a7235b', 17, 'no-image-available.png', '2024-11-12 21:14:26', 'active'),
-(194, '1114324', 'christian', 'Bastida', 'chan@gmail.com', '9f7b4eebeaba56f7e6d89277f50af00c', 19, 'no-image-available.png', '2024-11-15 21:45:27', 'active');
+(190, '1118962', 'Arthur', 'Villareal', 'Villareal21@gmail.com', '2e3e52564eec2066a11265d032a7235b', 17, 'no-image-available.png', '2024-11-12 21:14:26', 'active');
 
 -- --------------------------------------------------------
 
@@ -672,13 +606,13 @@ ALTER TABLE `academic_list`
 -- AUTO_INCREMENT for table `class_list`
 --
 ALTER TABLE `class_list`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `student_list`
 --
 ALTER TABLE `student_list`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=195;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=191;
 
 --
 -- AUTO_INCREMENT for table `subject_teacher`

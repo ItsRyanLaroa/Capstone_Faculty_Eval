@@ -499,23 +499,37 @@ function login(){
 				}
 			}
 		}
-		$chk = $this->db->query("SELECT * FROM academic_list where (".str_replace(",",'and',$data).") and id != '{$id}' ")->num_rows;
+		// Check for duplicate academic years
+		$chk = $this->db->query("SELECT * FROM academic_list WHERE (".str_replace(",", ' AND ', $data).") AND id != '{$id}'")->num_rows;
 		if($chk > 0){
 			return 2;
 		}
-		$hasDefault = $this->db->query("SELECT * FROM academic_list where is_default = 1")->num_rows;
+	
+		// Ensure there's always a default academic year
+		$hasDefault = $this->db->query("SELECT * FROM academic_list WHERE is_default = 1")->num_rows;
 		if($hasDefault == 0){
 			$data .= " , is_default = 1 ";
 		}
-		if(empty($id)){
-			$save = $this->db->query("INSERT INTO academic_list set $data");
-		}else{
-			$save = $this->db->query("UPDATE academic_list set $data where id = $id");
+	
+		// If setting this academic year as active, close all others
+		if (isset($_POST['status']) && $_POST['status'] == 1) {
+			$this->db->query("UPDATE academic_list SET status = 2 WHERE id != '{$id}'");
 		}
+	
+		// Save academic year
+		if(empty($id)){
+			// Insert new academic year with default status 2 (Closed)
+			$save = $this->db->query("INSERT INTO academic_list SET $data, status = 2");
+		}else{
+			$save = $this->db->query("UPDATE academic_list SET $data WHERE id = $id");
+		}
+	
 		if($save){
 			return 1;
 		}
 	}
+	
+	
 	function delete_academic(){
 		extract($_POST);
 		$delete = $this->db->query("DELETE FROM academic_list where id = $id");
@@ -810,6 +824,12 @@ function login(){
 	}
 	function save_restriction() {
 		extract($_POST);
+	
+		// Check if class_id or subject_id is empty
+		if (empty($class_id) || empty($subject_id)) {
+			return 4; // Missing class or subject
+		}
+	
 		$data = "";
 	
 		foreach ($_POST as $k => $v) {
@@ -846,6 +866,7 @@ function login(){
 		}
 		return 0; // Error occurred
 	}
+	
 	
 // In admin_class.php
 function delete_subject_restriction() {
