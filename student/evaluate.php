@@ -215,11 +215,16 @@ $restriction = $conn->query("
                     <div class="card-tools"></div>
                 </div>
                 <div class="card-body">
-                    <fieldset class="border border-info p-2 w-100">
-                        <legend class="w-auto">Rating Legend</legend>
-                        <p>5 = Strongly Agree, 4 = Agree, 3 = Uncertain, 2 = Disagree, 1 = Strongly Disagree</p>
-                    </fieldset>
-                    
+                <fieldset class="border border-info p-2 w-100">
+						<h3><span style="font-weight: bold;">Rating Legend</h3></span>
+						<p>
+							<span style="color: #dc143c; font-weight: bold;">5</span> - Strongly Agree <span style="color: #007bff; font-weight: bold;"> | </span>
+							<span style="color: #dc143c; font-weight: bold;">4</span> - Agree <span style="color: #007bff; font-weight: bold;"> | </span>
+							<span style="color: #dc143c; font-weight: bold;">3</span> - Uncertain <span style="color: #007bff; font-weight: bold;"> | </span>
+							<span style="color: #dc143c; font-weight: bold;">2</span> - Disagree <span style="color: #007bff; font-weight: bold;"> | </span>
+							<span style="color: #dc143c; font-weight: bold;">1</span> - Strongly Disagree
+						</p>
+					</fieldset>
                     <form id="manage-evaluation">
                         <input type="hidden" name="class_id" value="<?php echo $_SESSION['login_class_id'] ?>">
                         <input type="hidden" name="faculty_id" value="<?php echo $faculty_id ?>">
