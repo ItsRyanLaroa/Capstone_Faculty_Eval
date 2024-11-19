@@ -1,8 +1,8 @@
 <?php 
+include 'db_connect.php';
 
-// Function to get ordinal suffix
 function ordinal_suffix($num) {
-    $num = $num % 100; // protect against large numbers
+    $num = $num % 100;
     if ($num < 11 || $num > 13) {
         switch ($num % 10) {
             case 1: return $num . 'st';
@@ -12,324 +12,302 @@ function ordinal_suffix($num) {
     }
     return $num . 'th';
 }
-
-// Initialize variables from GET parameters
-$rid = isset($_GET['rid']) ? $_GET['rid'] : '';
-$faculty_id = isset($_GET['fid']) ? $_GET['fid'] : '';
-$subject_id = isset($_GET['sid']) ? $_GET['sid'] : '';
-
-// Fetch restrictions with evaluations if they exist and academic status is active
-$restriction = $conn->query("
-    SELECT 
-        r.id, 
-        s.id as sid, 
-        f.id as fid, 
-        concat(f.firstname, ' ', f.lastname) as faculty, 
-        f.lastname, -- Add this to the SELECT list
-        s.code, 
-        s.subject, 
-        el.evaluation_id as evaluation_id
-    FROM restriction_list r
-    INNER JOIN faculty_list f ON f.id = r.faculty_id
-    INNER JOIN subject_list s ON s.id = r.subject_id
-    INNER JOIN academic_list al ON al.id = r.academic_id AND al.status = 1
-    LEFT JOIN evaluation_list el ON el.restriction_id = r.id 
-        AND el.academic_id = {$_SESSION['academic']['id']} 
-        AND el.student_id = {$_SESSION['login_id']}
-    WHERE r.academic_id = {$_SESSION['academic']['id']}
-        AND r.class_id = {$_SESSION['login_class_id']}
-    ORDER BY f.lastname ASC -- Ensure it is properly referenced
-");
-
-
 ?>
 
-<style>
-    .list-group-item.active {
-        z-index: 2;
-        color: #fff;
-        background-color: #9b0a1e;
-        border-color: black;
-    }
-
-    .card-info.card-outline {
-        border-top: 3px solid #9b0a1e !important;
-    }
-
-    .border-info {
-        border-color: #dc143c !important;
-        margin-bottom: 20px;
-        margin-top: 20px;
-    }
-
-    .bg-gradient-secondary {
-        background: #007bff !important;
-        color: #fff;
-    }
-
-   .evaluated {
-    color: white; 
-    cursor: not-allowed; 
-    pointer-events: none; /* Disables any interaction with the element */
-    user-select: none; /* Prevents text selection */
-}
-
-.evaluated .badge {
-    cursor: not-allowed;
-}
-
-.evaluated input[type="radio"] {
-    pointer-events: none; /* Disables radio buttons */
-}
-
-.evaluated label {
-    pointer-events: none; /* Prevents clicking on the label */
-}
-
-.evaluated:hover {
-    background-color: transparent; /* Prevents hover effect */
-}
-
-    .evaluated { color: white; cursor: not-allowed; } .evaluated .badge { cursor: not-allowed; }
-
-    .bg-gradient-secondary {
-    background: #9b0a1e !important;
-    color: #fff;
-}
-
-@media(max-width: 540px){
-    .card{
-        margin-top: 10px;
-    }
-}
-
-@media (max-width: 480px) {
-    .card-body table {
-        font-size: 12px;
-    }
-
-    .card-body table th, 
-    .card-body table td {
-        padding: 4px;
-    }
-
-    .card-body table th {
-        font-size: 10px;
-    }
-
-    .card-body table td {
-        font-size: 10px;
-    }
-
-	.card-body table tr{
-		font-size: 10px;
-	}
-
-    .card-body table .icheck-success {
-        font-size: 10px;
-    }
-
-    .card-body {
-        overflow-x: auto;
-    }
-
-    .card-body table {
-        width: 100%;
-        table-layout: fixed;
-    }
-
-}
-
-@media (max-width: 480px) {
-
-    .col-md-8 .card-header {
-        font-size: 14px;
-        padding: 8px 10px;
-    }
-
-	.col-md-8 .card-header .card-tools {
-		margin-top: 5px;
-		margin-right: 5px;
-    }
-
-    .col-md-8 .card-header b {
-        font-size: 14px;
-    }
-
-
-    .col-md-8 .card-header .card-tools button {
-        font-size: 12px;
-        padding: 5px 8px;
-    }
-    
-
-    .col-md-8 .card-body {
-        padding: 10px;
-    }
-
-	.col-md-8 .card-body fieldset {
-        border: 1px solid #ddd;
-        padding: 10px;
-        border-radius: 5px;
-        font-size: 14px;
-    }
-
-
-    .col-md-8 .card-body fieldset legend {
-        font-size: 16px;
-        font-weight: bold;
-        margin-bottom: 8px; 
-    }
-}
-
-</style>
 <div class="col-lg-12">
-    <div class="row">
-    <div class="col-md-3" style="margin-bottom:20px;" >
-            <div class="list-group">
-                <?php 
-                $displayed_ids = []; // Array to track displayed IDs
-                while ($row = $restriction->fetch_array()):
-                    if (!in_array($row['id'], $displayed_ids)) { // Check if ID has already been displayed
-                        $displayed_ids[] = $row['id']; // Add ID to the array
+    <div class="callout callout-info">
+        <span style="color: #dc143c"><h3 class="text-center" style="font-weight: bold;">List of teachers you've evaluated</h3></span>
+
+        <!-- Search Bar -->
+        <div class="input-group mb-3" style="max-width: 50%; margin-left: auto;">
+            <input type="text" class="form-control" id="search-input" placeholder="Search..." aria-label="Search">
+            <div class="input-group-append">
+                <span class="input-group-text"><i class="fa fa-search"></i></span>
+            </div>
+        </div>
+
+        <table class="table table-striped table-hover">
+            <thead class="bg-gradient-secondary text-white">
+                <tr>
+           
+                    <th>Faculty Name</th>
+                    <th>Subject</th>
+                    <th>Academic Year</th>
+                    <th>Class</th>
+                </tr>
+            </thead>
+            <tbody id="evaluation-table-body">
+            <?php 
+                $student_id = $_SESSION['login_id'];
+                $academic_id = $_SESSION['academic']['id'];
+
+                $evaluations = $conn->query("SELECT DISTINCT 
+                    CONCAT(f.lastname, ', ', f.firstname) AS faculty_name,
+                    sl.subject,
+                    a.year AS academic_year,
+                    CONCAT(cl.level, ' - ', cl.section) AS class_details,
+                    cl.curriculum,
+                    r.faculty_id,
+                    f.avatar
+                FROM evaluation_list r
+                LEFT JOIN subject_list sl ON r.subject_id = sl.id
+                LEFT JOIN faculty_list f ON r.faculty_id = f.id
+                LEFT JOIN class_list cl ON r.class_id = cl.id
+                LEFT JOIN academic_list a ON r.academic_id = a.id
+                WHERE r.student_id = '$student_id' AND r.academic_id = '$academic_id'
+                ORDER BY f.lastname ASC");
+
+                while ($row = $evaluations->fetch_assoc()): 
+                    $avatar = !empty($row['avatar']) ? 'assets/uploads/' . $row['avatar'] : 'assets/uploads/default_avatar.png';
                 ?>
-                <a class="list-group-item list-group-item-action <?php echo isset($rid) && $rid == $row['id'] ? 'active' : '' ?>" 
-                    href="./index.php?page=evaluate&rid=<?php echo $row['id'] ?>&sid=<?php echo $row['sid'] ?>&fid=<?php echo $row['fid'] ?>"
-                    <?php echo $row['evaluation_id'] ? 'style="pointer-events: none;"' : ''; ?>>
-                    <?php echo ucwords($row['faculty']) . ' - (' . $row["code"] . ') ' . $row['subject'] ?>
-                    <?php if ($row['evaluation_id']): ?>
-                        <span class="badge badge-success evaluated">
-                            <i class="fa fa-check"></i> Done
-                        </span>
-                    <?php else: ?>
-                        <span class="badge badge-warning">Not Evaluated</span>
-                    <?php endif; ?>
-                </a>
-                <?php 
-                    } // End of ID check
-                endwhile; ?>
-            </div>
+                <tr>
+                  
+                    <td><?php echo ucwords($row['faculty_name']); ?></td>
+                    <td><?php echo $row['subject']; ?></td>
+                    <td><?php echo $row['academic_year'] . ' ' . ordinal_suffix($_SESSION['academic']['semester']) . ' Semester'; ?></td>
+                    <td><?php echo $row['curriculum'] . ' (' . $row['class_details'] . ')'; ?></td>
+                </tr>
+                <?php endwhile; ?>
+            </tbody>
+        </table>
+
+        <!-- Rows per page selector and pagination controls here -->
+        <div class="mb-3" style="width: 100px; margin-left: auto;">
+            <select id="rows-per-page" class="form-control">
+                <option value="5">5 rows</option>
+                <option value="10">10 rows</option>
+                <option value="15">15 rows</option>
+                <option value="20">20 rows</option>
+            </select>
         </div>
-
-        <div class="col-md-9">
-            <div class="card card-outline card-info">
-                <div class="card-header">
-                    <b>Evaluation Questionnaire for Academic: <?php echo $_SESSION['academic']['year'] . ' ' . (ordinal_suffix($_SESSION['academic']['semester'])) ?></b>
-                    <div class="card-tools"></div>
-                </div>
-                <div class="card-body">
-                <fieldset class="border border-info p-2 w-100">
-						<h3><span style="font-weight: bold;">Rating Legend</h3></span>
-						<p>
-							<span style="color: #dc143c; font-weight: bold;">5</span> - Strongly Agree <span style="color: #007bff; font-weight: bold;"> | </span>
-							<span style="color: #dc143c; font-weight: bold;">4</span> - Agree <span style="color: #007bff; font-weight: bold;"> | </span>
-							<span style="color: #dc143c; font-weight: bold;">3</span> - Uncertain <span style="color: #007bff; font-weight: bold;"> | </span>
-							<span style="color: #dc143c; font-weight: bold;">2</span> - Disagree <span style="color: #007bff; font-weight: bold;"> | </span>
-							<span style="color: #dc143c; font-weight: bold;">1</span> - Strongly Disagree
-						</p>
-					</fieldset>
-                    <form id="manage-evaluation">
-                        <input type="hidden" name="class_id" value="<?php echo $_SESSION['login_class_id'] ?>">
-                        <input type="hidden" name="faculty_id" value="<?php echo $faculty_id ?>">
-                        <input type="hidden" name="restriction_id" value="<?php echo $rid ?>">
-                        <input type="hidden" name="subject_id" value="<?php echo $subject_id ?>">
-                        <input type="hidden" name="academic_id" value="<?php echo $_SESSION['academic']['id'] ?>">
-
-                        <?php 
-                        $q_arr = array();
-                        $criteria = $conn->query("SELECT * FROM criteria_list WHERE id IN 
-                            (SELECT criteria_id FROM question_list WHERE academic_id = {$_SESSION['academic']['id']}) 
-                            ORDER BY abs(order_by) ASC");
-                        while ($crow = $criteria->fetch_assoc()):
-                        ?>
-                        <table class="table table-condensed">
-                            <thead>
-                                <tr class="bg-gradient-secondary">
-                                    <th class="p-1"><b><?php echo $crow['criteria'] ?></b></th>
-                                    <th class="text-center">1</th>
-                                    <th class="text-center">2</th>
-                                    <th class="text-center">3</th>
-                                    <th class="text-center">4</th>
-                                    <th class="text-center">5</th>
-                                </tr>
-                            </thead>
-                            <tbody class="tr-sortable">
-                                <?php 
-                                $questions = $conn->query("SELECT * FROM question_list 
-                                    WHERE criteria_id = {$crow['id']} 
-                                    AND academic_id = {$_SESSION['academic']['id']} 
-                                    ORDER BY abs(order_by) ASC");
-                                while ($row = $questions->fetch_assoc()):
-                                    $q_arr[$row['id']] = $row;
-                                    $isEvaluated = isset($row['evaluation_id']) && $row['evaluation_id'] > 0;
-                                ?>
-                                <tr class="bg-white">
-                                    <td class="p-1" width="40%"><?php echo $row['question'] ?>
-                                        <input type="hidden" name="qid[]" value="<?php echo $row['id'] ?>">
-                                    </td>
-                                    <?php for ($c = 1; $c <= 5; $c++): ?>
-                                    <td class="text-center">
-                                        <div class="icheck-success d-inline">
-                                            <input type="radio" name="rate[<?php echo $row['id'] ?>]" id="qradio<?php echo $row['id'] . '_' . $c ?>" value="<?php echo $c ?>" <?php echo $isEvaluated ? 'disabled' : ''; ?>>
-                                            <label for="qradio<?php echo $row['id'] . '_' . $c ?>"></label>
-                                        </div>
-                                    </td>
-                                    <?php endfor; ?>
-                                </tr>
-                                <?php endwhile; ?>
-                            </tbody>
-                        </table>
-                        <?php endwhile; ?>
-
-                        <fieldset class="border border-info p-2 w-100 mt-4">
-                            <legend class="w-auto">Additional Feedback</legend>
-                            <p>Please provide any additional comments or feedback here:</p>
-                            <textarea name="feedback" class="form-control" rows="4" placeholder="Enter your feedback here..."></textarea>
-                        </fieldset>
-
-                        <div class="card-tools mt-3">
-                            <button class="btn btn-sm btn-flat btn-primary bg-gradient-primary mx-1" form="manage-evaluation" id="submit-evaluation" disabled>Submit Evaluation</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+        <div id="pagination-controls" class="mt-3 d-flex justify-content-end"></div>
     </div>
 </div>
 
+<style>
+    .bg-gradient-secondary {
+        background: #B31B1C linear-gradient(182deg, #b31b1b, #dc3545) repeat-x !important;
+        color: #fff;
+    }
+    .rounded-circle {
+        border-radius: 50%;
+    }
+    #pagination-controls button {
+        margin: 0 5px;
+        border: none;
+        padding: 5px 10px;
+        background-color: #007bff;
+        color: #fff;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+    #pagination-controls button.active {
+        background-color: #007bff;
+    }
+    #pagination-controls button:disabled {
+        background-color: #d6d6d6;
+        cursor: not-allowed;
+    }
+    .table-hover tbody tr:hover {
+        background-color: #f2f2f2;
+    }
+
+    .callout.callout-info{
+        border-left-color: #9b0a1e;
+    }
+
+    @media (max-width: 540px) {
+    .callout.callout-info {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .btn-info {
+        font-size: 12px;
+    }
+
+    .card-body {
+        padding: 10px;
+    }
+
+    .table th, .table td {
+        font-size: 12px;
+        padding: 8px;
+    }
+
+    .font-weight-bold {
+        font-size: 14px;
+    }
+
+    .ml-3 h5 {
+        font-size: 20px;
+    }
+}
+
+
+@media (max-width: 430px) {
+    .callout.callout-info {
+        padding: 8px;
+        font-size: 12px;
+    }
+
+    .input-group.mb-3 {
+        max-width: 90%;
+    }
+
+    .btn-info {
+        font-size: 10px;
+        padding: 5px 10px;
+    }
+
+    .card-body {
+        padding: 8px;
+    }
+
+    .table th, .table td {
+        font-size: 10px;
+        padding: 6px;
+    }
+
+    .font-weight-bold {
+        font-size: 12px;
+    }
+
+    .ml-3 h5 {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 414px) {
+    .callout.callout-info {
+        padding: 6px;
+        font-size: 10px;
+    }
+
+    .input-group.mb-3 {
+        max-width: 95%;
+    }
+
+    .btn-info {
+        font-size: 9px;
+        padding: 4px 8px;
+    }
+
+    .card-body {
+        padding: 6px;
+    }
+
+    .table th, .table td {
+        font-size: 9px;
+        padding: 5px;
+    }
+
+    .font-weight-bold {
+        font-size: 10px;
+    }
+
+    .ml-3 h5 {
+        font-size: 16px;
+    }
+}
+</style>
+
 <script>
+  
     $(document).ready(function() {
-        function checkFormCompletion() {
-            let allAnswered = true;
-            $('input[type="radio"]').each(function() {
-                const name = $(this).attr('name');
-                if (!$('input[name="' + name + '"]:checked').length) {
-                    allAnswered = false;
-                    return false;
-                }
+        let rowsPerPage = 5;
+        let currentPage = 1;
+
+        // Search function
+        $('#search-input').on('keyup', function() {
+            let value = $(this).val().toLowerCase();
+            filterTable(value);
+        });
+
+        // Rows per page selector change
+        $('#rows-per-page').on('change', function() {
+            rowsPerPage = parseInt($(this).val());
+            currentPage = 1;
+            paginateTable();
+        });
+
+        // Function to filter the table based on the search query
+        function filterTable(query) {
+            $('#evaluation-table-body tr').each(function() {
+                const rowText = $(this).text().toLowerCase();
+                $(this).toggle(rowText.indexOf(query) > -1);  // Show or hide rows based on the query
             });
-            $('#submit-evaluation').prop('disabled', !allAnswered);
+            paginateTable();  // Recalculate pagination after filtering
         }
 
-        $('input[type="radio"]').on('change', checkFormCompletion);
-        checkFormCompletion();
+        // Function to paginate the table
+        function paginateTable() {
+            const rows = $('#evaluation-table-body tr');
+            const filteredRows = rows.filter(':visible'); // Only visible rows are considered
+            const totalRows = filteredRows.length;
+            const totalPages = Math.ceil(totalRows / rowsPerPage);
 
-        $('#manage-evaluation').submit(function(e) {
-            e.preventDefault();
-            start_load();
-            $.ajax({
-                url: 'ajax.php?action=save_evaluation',
-                data: $(this).serialize(),
-                method: 'POST',
-                success: function(resp) {
-                    if (resp == 1) {
-                        alert_toast("Evaluation successfully submitted", 'success');
-                        setTimeout(function() {
-                            location.reload();
-                        }, 1500);
+            // Hide all rows initially
+            rows.hide();
+
+            // Calculate the range of rows to be displayed
+            const start = (currentPage - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+
+            // Show only the rows for the current page
+            filteredRows.slice(start, end).show();
+
+            // Render pagination controls
+            renderPaginationControls(totalPages, totalRows);
+        }
+
+        // Function to render pagination controls
+        function renderPaginationControls(totalPages, totalRows) {
+            $('#pagination-controls').empty();
+
+            // Disable buttons if necessary
+            const prevButton = $('<button></button>')
+                .text('Previous')
+                .prop('disabled', currentPage === 1)
+                .on('click', function() {
+                    if (currentPage > 1) {
+                        currentPage--;
+                        paginateTable();
                     }
-                }
-            });
-        });
+                });
+
+            const nextButton = $('<button></button>')
+                .text('Next')
+                .prop('disabled', currentPage === totalPages || totalRows === 0)
+                .on('click', function() {
+                    if (currentPage < totalPages) {
+                        currentPage++;
+                        paginateTable();
+                    }
+                });
+
+            // Append the Previous button
+            $('#pagination-controls').append(prevButton);
+
+            // Create page number buttons
+            for (let i = 1; i <= totalPages; i++) {
+                const btn = $('<button></button>')
+                    .text(i)
+                    .addClass(i === currentPage ? 'active' : '')
+                    .on('click', function() {
+                        currentPage = i;
+                        paginateTable();
+                    });
+                $('#pagination-controls').append(btn);
+            }
+
+            // Append the Next button
+            $('#pagination-controls').append(nextButton);
+        }
+
+        // Initialize pagination
+        paginateTable();
     });
 </script>
+
+
