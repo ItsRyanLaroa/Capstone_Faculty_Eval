@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php 
-session_start();
 include('./db_connect.php');
 ob_start();
 
