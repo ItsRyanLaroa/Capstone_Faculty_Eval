@@ -211,7 +211,8 @@ $restriction = $conn->query("
         <div class="col-md-9">
             <div class="card card-outline card-info">
                 <div class="card-header">
-                    <b>Evaluation Questionnaire for Academic: <?php echo $_SESSION['academic']['year'] . ' ' . (ordinal_suffix($_SESSION['academic']['semester'])) ?></b>
+			<b>Evaluation Questionnaire for Academic: <span style="color: #dc143c; font-weight: bold;"><?php echo $year . ' (' . ordinal_suffix($semester) . ' Semester)'; ?></span></b>
+          
                     <div class="card-tools"></div>
                 </div>
                 <div class="card-body">
