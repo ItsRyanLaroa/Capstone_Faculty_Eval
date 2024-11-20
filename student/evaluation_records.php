@@ -18,15 +18,7 @@ function ordinal_suffix($num) {
     <div class="callout callout-info">
         <span style="color: #dc143c"><h3 class="text-center" style="font-weight: bold;">List of teachers you've evaluated</h3></span>
 
-        <!-- Search Bar -->
-        <div class="input-group mb-3" style="max-width: 50%; margin-left: auto;">
-            <input type="text" class="form-control" id="search-input" placeholder="Search..." aria-label="Search">
-            <div class="input-group-append">
-                <span class="input-group-text"><i class="fa fa-search"></i></span>
-            </div>
-        </div>
-
-        <table class="table table-striped table-hover">
+        <table class="table table-hover table-bordered styled-table" id="evaluation-table">
             <thead class="bg-gradient-secondary text-white">
                 <tr>
            
@@ -36,7 +28,7 @@ function ordinal_suffix($num) {
                     <th>Class</th>
                 </tr>
             </thead>
-            <tbody id="evaluation-table-body">
+              <tbody id="evaluation-table-body">
             <?php 
                 $student_id = $_SESSION['login_id'];
                 $academic_id = $_SESSION['academic']['id'];
@@ -72,20 +64,12 @@ function ordinal_suffix($num) {
             </tbody>
         </table>
 
-        <!-- Rows per page selector and pagination controls here -->
-        <div class="mb-3" style="width: 100px; margin-left: auto;">
-            <select id="rows-per-page" class="form-control">
-                <option value="5">5 rows</option>
-                <option value="10">10 rows</option>
-                <option value="15">15 rows</option>
-                <option value="20">20 rows</option>
-            </select>
-        </div>
-        <div id="pagination-controls" class="mt-3 d-flex justify-content-end"></div>
+     
     </div>
 </div>
 
 <style>
+   
     .bg-gradient-secondary {
         background: #B31B1C linear-gradient(182deg, #b31b1b, #dc3545) repeat-x !important;
         color: #fff;
@@ -214,101 +198,82 @@ function ordinal_suffix($num) {
 </style>
 
 <script>
-  
-    $(document).ready(function() {
+   $(document).ready(function() {
+        $('#evaluation-table').dataTable();
+        
         let rowsPerPage = 5;
         let currentPage = 1;
 
-        // Search function
         $('#search-input').on('keyup', function() {
             let value = $(this).val().toLowerCase();
-            filterTable(value);
+            filterTableRows(value);
         });
 
-        // Rows per page selector change
         $('#rows-per-page').on('change', function() {
             rowsPerPage = parseInt($(this).val());
             currentPage = 1;
-            paginateTable();
+            paginateTableRows();
         });
 
-        // Function to filter the table based on the search query
-        function filterTable(query) {
+        function filterTableRows(query) {
             $('#evaluation-table-body tr').each(function() {
-                const rowText = $(this).text().toLowerCase();
-                $(this).toggle(rowText.indexOf(query) > -1);  // Show or hide rows based on the query
+                $(this).toggle($(this).text().toLowerCase().indexOf(query) > -1);
             });
-            paginateTable();  // Recalculate pagination after filtering
+            paginateTableRows();
         }
 
-        // Function to paginate the table
-        function paginateTable() {
+        function paginateTableRows() {
             const rows = $('#evaluation-table-body tr');
-            const filteredRows = rows.filter(':visible'); // Only visible rows are considered
-            const totalRows = filteredRows.length;
+            const totalRows = rows.length;
             const totalPages = Math.ceil(totalRows / rowsPerPage);
-
-            // Hide all rows initially
             rows.hide();
 
-            // Calculate the range of rows to be displayed
             const start = (currentPage - 1) * rowsPerPage;
             const end = start + rowsPerPage;
+            rows.slice(start, end).show();
 
-            // Show only the rows for the current page
-            filteredRows.slice(start, end).show();
-
-            // Render pagination controls
-            renderPaginationControls(totalPages, totalRows);
+            renderPaginationControls(totalPages);
         }
 
-        // Function to render pagination controls
-        function renderPaginationControls(totalPages, totalRows) {
+        function renderPaginationControls(totalPages) {
             $('#pagination-controls').empty();
 
-            // Disable buttons if necessary
             const prevButton = $('<button></button>')
                 .text('Previous')
                 .prop('disabled', currentPage === 1)
                 .on('click', function() {
                     if (currentPage > 1) {
                         currentPage--;
-                        paginateTable();
+                        paginateTableRows();
                     }
                 });
 
             const nextButton = $('<button></button>')
                 .text('Next')
-                .prop('disabled', currentPage === totalPages || totalRows === 0)
+                .prop('disabled', currentPage === totalPages)
                 .on('click', function() {
                     if (currentPage < totalPages) {
                         currentPage++;
-                        paginateTable();
+                        paginateTableRows();
                     }
                 });
 
-            // Append the Previous button
             $('#pagination-controls').append(prevButton);
 
-            // Create page number buttons
             for (let i = 1; i <= totalPages; i++) {
                 const btn = $('<button></button>')
                     .text(i)
                     .addClass(i === currentPage ? 'active' : '')
                     .on('click', function() {
                         currentPage = i;
-                        paginateTable();
+                        paginateTableRows();
                     });
                 $('#pagination-controls').append(btn);
             }
 
-            // Append the Next button
             $('#pagination-controls').append(nextButton);
         }
 
-        // Initialize pagination
-        paginateTable();
+        paginateTableRows();
     });
 </script>
-
-
