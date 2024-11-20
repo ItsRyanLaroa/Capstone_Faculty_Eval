@@ -187,18 +187,7 @@ function login(){
 		// Determine the unique field based on login type
 		$uniqueField = ($_SESSION['login_type'] == 3) ? 'school_id' : 'email';
 	
-		// Check if the school_id is being updated
-		if ($_SESSION['login_type'] == 3 && isset($school_id)) {
-			// Check if the new school_id is the same as the old one or if it doesn't exist in the database
-			$result = $this->db->query("SELECT id FROM {$type[$_SESSION['login_type']]} WHERE school_id = '$school_id' AND id != '$id'");
-			if ($result->num_rows > 0) {
-				return "School ID already exists"; // Return a message if the school_id already exists
-			}
-		}
-	
-		// Loop through all the post data to prepare for update
 		foreach ($_POST as $k => $v) {
-			// Skip id, password, and other unnecessary fields
 			if (!in_array($k, array('id', 'cpass', 'table', 'password')) && !is_numeric($k)) {
 				$data .= empty($data) ? " $k='$v' " : ", $k='$v' ";
 			}
@@ -235,9 +224,7 @@ function login(){
 			if (isset($_FILES['img']) && !empty($_FILES['img']['tmp_name'])) {
 				$_SESSION['login_avatar'] = $fname;
 			}
-			return 1; // Return success
-		} else {
-			return "Error updating user"; // Return error if save fails
+			return 1;
 		}
 	}
 	
@@ -499,37 +486,23 @@ function login(){
 				}
 			}
 		}
-		// Check for duplicate academic years
-		$chk = $this->db->query("SELECT * FROM academic_list WHERE (".str_replace(",", ' AND ', $data).") AND id != '{$id}'")->num_rows;
+		$chk = $this->db->query("SELECT * FROM academic_list where (".str_replace(",",'and',$data).") and id != '{$id}' ")->num_rows;
 		if($chk > 0){
 			return 2;
 		}
-	
-		// Ensure there's always a default academic year
-		$hasDefault = $this->db->query("SELECT * FROM academic_list WHERE is_default = 1")->num_rows;
+		$hasDefault = $this->db->query("SELECT * FROM academic_list where is_default = 1")->num_rows;
 		if($hasDefault == 0){
 			$data .= " , is_default = 1 ";
 		}
-	
-		// If setting this academic year as active, close all others
-		if (isset($_POST['status']) && $_POST['status'] == 1) {
-			$this->db->query("UPDATE academic_list SET status = 2 WHERE id != '{$id}'");
-		}
-	
-		// Save academic year
 		if(empty($id)){
-			// Insert new academic year with default status 2 (Closed)
-			$save = $this->db->query("INSERT INTO academic_list SET $data, status = 2");
+			$save = $this->db->query("INSERT INTO academic_list set $data");
 		}else{
-			$save = $this->db->query("UPDATE academic_list SET $data WHERE id = $id");
+			$save = $this->db->query("UPDATE academic_list set $data where id = $id");
 		}
-	
 		if($save){
 			return 1;
 		}
 	}
-	
-	
 	function delete_academic(){
 		extract($_POST);
 		$delete = $this->db->query("DELETE FROM academic_list where id = $id");
@@ -824,12 +797,6 @@ function login(){
 	}
 	function save_restriction() {
 		extract($_POST);
-	
-		// Check if class_id or subject_id is empty
-		if (empty($class_id) || empty($subject_id)) {
-			return 4; // Missing class or subject
-		}
-	
 		$data = "";
 	
 		foreach ($_POST as $k => $v) {
@@ -866,7 +833,6 @@ function login(){
 		}
 		return 0; // Error occurred
 	}
-	
 	
 // In admin_class.php
 function delete_subject_restriction() {
@@ -960,9 +926,13 @@ function save_evaluation() {
 	function view_report() {
 		extract($_POST);
 		$data = array();
-	
-		// Fetch evaluations with status 'active'
-		$get = $this->db->query("SELECT ea.*, q.question 
+		
+		// Fetch total number of questions from question_list
+		$totalQuestions = $this->db->query("SELECT COUNT(id) as total FROM question_list")->fetch_assoc()['total'];
+		
+		// Fetch evaluation answers with question text from question_list
+		$get = $this->db->query("
+			SELECT ea.*, q.question 
 			FROM evaluation_answers ea
 			JOIN question_list q ON ea.question_id = q.id
 			WHERE evaluation_id IN (
@@ -971,56 +941,35 @@ function save_evaluation() {
 				WHERE academic_id = {$_SESSION['academic']['id']} 
 				AND faculty_id = $faculty_id 
 				AND subject_id = $subject_id 
-				AND class_id = $class_id 
-				AND status = 'active'
-			)");
+				AND class_id = $class_id
+			)
+		");
 	
-		// Count active evaluations
-		$answered = $this->db->query("SELECT * 
+		// Fetch total evaluations
+		$answered = $this->db->query("
+			SELECT * 
 			FROM evaluation_list 
 			WHERE academic_id = {$_SESSION['academic']['id']} 
 			AND faculty_id = $faculty_id 
 			AND subject_id = $subject_id 
-			AND class_id = $class_id 
-			AND status = 'active'");
-	
+			AND class_id = $class_id
+		");
+		$totalQuestions=20;
 		$totalRating = 0;
-		$feedbackList = [];
-		$rate = array();
-	
 		while ($row = $get->fetch_assoc()) {
-			$totalRating += $row['rate']; // Sum all ratings
-			if (!empty($row['feedback']) && !in_array($row['feedback'], $feedbackList)) {
-				$feedbackList[] = $row['feedback'];
-			}
-	
-			if (!isset($rate[$row['question_id']][$row['rate']])) {
-				$rate[$row['question_id']][$row['rate']] = 0;
-			}
-			$rate[$row['question_id']][$row['rate']] += 5;
+			// Sum all ratings across the questions
+			$totalRating += $row['rate'];
 		}
 	
 		$ta = $answered->num_rows; // Total answered evaluations
 	
-		// Calculate overall average rating
-		$totalQuestions = 20; // Ensure this is accurate or dynamically fetched
+		// Calculate overall average rating by dividing total rating by (totalQuestions * totalEvaluations)
 		$averageRating = ($ta > 0 && $totalQuestions > 0) ? number_format($totalRating / ($totalQuestions * $ta), 2) : 0;
 	
-		$r = array();
-		foreach ($rate as $qk => $qv) {
-			foreach ($qv as $rk => $rv) {
-				$r[$qk][$rk] = ($rate[$qk][$rk] / $ta) * 1;
-			}
-		}
-	
 		$data['tse'] = $ta; // Total students evaluated
-		$data['averageRating'] = $averageRating;
-		$data['data'] = $r;
-		$data['feedback'] = !empty($feedbackList) ? $feedbackList[0] : 'No feedback available.';
-	
+		$data['averageRating'] = $averageRating; 
 		return json_encode($data);
 	}
-	
 	
 	
     public function get_detailed_report() {
@@ -1145,9 +1094,92 @@ function save_evaluation() {
 		}
 	}
 	
-	
-	
+	function get_staff_class(){
+		extract($_POST);
+		$data = array();
+		$get = $this->db->query("SELECT c.id,concat(c.curriculum,' ',c.level,' - ',c.section) as class,s.id as sid,concat(s.code,' - ',s.subject) as subj FROM staff_restriction_list r inner join class_list c on c.id = r.class_id inner join subject_list s on s.id = r.subject_id where r.staff_id = {$sid} and academic_id = {$_SESSION['academic']['id']} ");
+		while($row= $get->fetch_assoc()){
+			$data[]=$row;
+		}
+		return json_encode($data);
 
+	}
+	function get_staff_report(){
+		extract($_POST);
+		$data = array();
+		$get = $this->db->query("SELECT * FROM staff_evaluation_answers where evaluation_id in (SELECT evaluation_id FROM staff_evaluation_list where academic_id = {$_SESSION['academic']['id']} and staff_id = $staff_id and subject_id = $subject_id and class_id = $class_id ) ");
+		$answered = $this->db->query("SELECT * FROM staff_evaluation_list where academic_id = {$_SESSION['academic']['id']} and staff_id = $staff_id and subject_id = $subject_id and class_id = $class_id");
+			$rate = array();
+		while($row = $get->fetch_assoc()){
+			if(!isset($rate[$row['question_id']][$row['rate']]))
+			$rate[$row['question_id']][$row['rate']] = 0;
+			$rate[$row['question_id']][$row['rate']] += 1;
+
+		}
+		// $data[]= $row;
+		$ta = $answered->num_rows;
+		$r = array();
+		foreach($rate as $qk => $qv){
+			foreach($qv as $rk => $rv){
+			$r[$qk][$rk] =($rate[$qk][$rk] / $ta) *100;
+		}
+	}
+	$data['tse'] = $ta;
+	$data['data'] = $r;
+		
+		return json_encode($data);
+
+	}
+	function save_staff() {
+		extract($_POST);
+		$data = "";
+	
+		foreach($_POST as $k => $v) {
+			if(!in_array($k, array('id')) && !is_numeric($k)) {
+				if(empty($data)) {
+					$data .= " $k='$v' ";
+				} else {
+					$data .= ", $k='$v' ";
+				}
+			}
+		}
+	
+		$check = $this->db->query("SELECT * FROM staff_list WHERE email ='$email' " . (!empty($id) ? " AND id != {$id} " : ''))->num_rows;
+		if($check > 0) {
+			return 2;
+			exit;
+		}
+	
+		if(isset($_FILES['img']) && $_FILES['img']['tmp_name'] != '') {
+			$fname = strtotime(date('y-m-d H:i')) . '_' . $_FILES['img']['name'];
+			$move = move_uploaded_file($_FILES['img']['tmp_name'], 'assets/uploads/' . $fname);
+			$data .= ", avatar = '$fname' ";
+		}
+	
+		if(empty($id)) {
+			$save = $this->db->query("INSERT INTO staff_list SET $data");
+		} else {
+			$save = $this->db->query("UPDATE staff_list SET $data WHERE id = $id");
+		}
+	
+		if($save) {
+			return 1;
+		}
+	}
+	
+	public function save_staff_question() {
+        global $conn;
+        $staff_id = $_POST['staff_id'];
+        $class_id = $_POST['class_id'];
+        // Add your logic for saving staff questions
+        // For example:
+        $query = "INSERT INTO staff_questionnaire (staff_id, class_id) VALUES ('$staff_id', '$class_id')";
+        if ($conn->query($query)) {
+            echo 1; // Success
+        } else {
+            echo 2; // Failure
+        }
+    }
 // Inside admin_class.php
 
 
