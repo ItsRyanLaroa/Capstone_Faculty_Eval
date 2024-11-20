@@ -156,12 +156,12 @@ function delete_subject_restriction(id){
 </script>
 
 <style>
-
-    .col-lg-12{
-        box-shadow: 0 0 1px rgba(0, 0, 0, .125), 0 1px 3px rgba(0, 0, 0, .2);
-        margin-bottom: 1rem;
-    }
-
+.btn-group, .btn-group-vertical {
+   
+    float: left;
+    display: inline-flex;
+    vertical-align: left;
+}
 .card-header {
     background-color: transparent;
     border-bottom: none;
@@ -179,9 +179,20 @@ function delete_subject_restriction(id){
 thead th {
     background-color: #9b0a1e;
     color:  #f3f3f3;
-
     font-weight: bold;
 }
+tbody tr:hover {
+        background-color: #95d2ec;
+    }
+    .styled-table tbody tr {
+        border-bottom: 1px solid #dddddd;
+    }
+    .styled-table tbody tr:nth-of-type(even) {
+        background-color: #f3f3f3;
+    }
+    .styled-table tbody tr:last-of-type {
+        border-bottom: 2px solid #009879;
+    }
 
 @media (max-width: 540px) {
     .card-body {
@@ -329,19 +340,11 @@ thead th {
     }
 
 
-    tbody tr {
-        height: 24px;
-    }
-
-
     .text-center {
         text-align: center;
     }
 
-    .btn-flat {
-        font-size: 0.55rem;
-        padding: 0.1rem 0.25rem;
-    }
+
 
 
     .dropdown-toggle {
