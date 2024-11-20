@@ -80,6 +80,11 @@ $evaluations = $conn->query("
     </div>
 </div>
 <style>
+    .card-header {
+ 
+ border: none;
+
+}
     .styled-table tbody tr {
         border-bottom: 1px solid #dddddd;
     }
