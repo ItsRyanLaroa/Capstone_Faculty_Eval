@@ -69,23 +69,41 @@ $astat = array("Not Yet Started","On-going","Closed");
     </div>
 </div>
 <div class="row">
-  <div class="col-12 col-sm-6 col-md-4">
+<div class="col-12 col-sm-6 col-md-4">
     <div class="small-box bg-light shadow-sm border">
-      <div class="inner">
-        <!-- Get the total unique evaluated students -->
-        <h3><?php 
-          $evaluated_students_query = "SELECT COUNT(DISTINCT student_id) AS total_evaluated FROM evaluation_list"; 
-          $result = $conn->query($evaluated_students_query);
-          $row = $result->fetch_assoc();
-          echo $row['total_evaluated']; 
-        ?></h3>
-        <p>Total Students Who Evaluated</p>
-      </div>
-      <div class="icon">
-        <i class="fa fa-clipboard-check"></i> <!-- Change icon as needed -->
-      </div>
+        <div class="inner">
+            <!-- Get the total unique evaluated students -->
+            <h3>
+                <?php 
+                include 'db_connect.php';
+                
+                // Get the faculty ID from the session
+                $teacher_id = is_array($_SESSION['login_id']) ? $_SESSION['login_id']['id'] : $_SESSION['login_id'];
+                
+                // Query to get the total number of unique students who evaluated for the specific teacher
+                $evaluated_students_query = "
+                    SELECT COUNT(DISTINCT r.student_id) AS total_evaluated
+                    FROM evaluation_list r
+                    LEFT JOIN subject_list sl ON r.subject_id = sl.id
+                    LEFT JOIN student_list st ON r.student_id = st.id
+                    LEFT JOIN class_list cl ON r.class_id = cl.id
+                    LEFT JOIN academic_list a ON r.academic_id = a.id
+                    WHERE r.faculty_id = '$teacher_id'
+                ";
+                
+                $result = $conn->query($evaluated_students_query);
+                $row = $result->fetch_assoc();
+                echo $row['total_evaluated']; 
+                ?>
+            </h3>
+            <p>Total Students Who Evaluated</p>
+        </div>
+        <div class="icon">
+            <i class="fa fa-clipboard-check"></i> <!-- Change icon as needed -->
+        </div>
     </div>
-  </div>
+</div>
+
   <?php
       // Assuming $_SESSION['login_id'] holds the ID of the logged-in faculty
       $faculty_id = $_SESSION['login_id'];
