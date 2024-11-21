@@ -13,24 +13,17 @@ function ordinal_suffix($num) {
     return $num . 'th';
 }
 
-// Initialize academic ID from the session
-if (isset($_SESSION['academic']['id'])) {
-    $academic_id = $_SESSION['academic']['id'];
-} else {
-    die("Academic ID not set in session.");
-}
-
 // Get the faculty ID from the session
 $teacher_id = is_array($_SESSION['login_id']) ? $_SESSION['login_id']['id'] : $_SESSION['login_id'];
 
 // Fetch data for the filter dropdown
 $academic_data = $conn->query("
-    SELECT DISTINCT CONCAT(year, ' - ', semester) AS academic_term
+    SELECT DISTINCT CONCAT(year, ' - ', semester) AS academic_term, id
     FROM academic_list
     ORDER BY year DESC, semester ASC
 ");
 
-// Fetch evaluations
+// Fetch evaluations with a direct join
 $evaluations = $conn->query("
     SELECT 
         sl.subject,
@@ -45,8 +38,8 @@ $evaluations = $conn->query("
     LEFT JOIN student_list st ON r.student_id = st.id
     LEFT JOIN class_list cl ON r.class_id = cl.id
     LEFT JOIN academic_list a ON r.academic_id = a.id
-    WHERE r.faculty_id = '$teacher_id' AND r.academic_id = '$academic_id'
-    ORDER BY st.lastname ASC
+    WHERE r.faculty_id = '$teacher_id'
+    ORDER BY a.year DESC, a.semester ASC, st.lastname ASC
 ");
 ?>
 <div class="col-lg-12">
