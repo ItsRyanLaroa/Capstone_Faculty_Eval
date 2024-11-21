@@ -125,45 +125,57 @@ if ($row) {
   <div class="small-box bg-light shadow-sm border">
     <div class="inner">
       <h3><?php echo $total_students; ?></h3>
-      <p>Total Students in Your Class</p>
+      <p>Total students in your class</p>
     </div>
     <div class="icon">
       <i class="fa fa-user-graduate"></i> <!-- Icon for class students -->
     </div>
   </div>
 </div>
-
 <div class="col-12 col-sm-6 col-md-4">
     <div class="small-box bg-light shadow-sm border">
         <div class="inner">
             <h3>
                 <?php
-                // Ensure $class_id is available
-                if (!empty($class_id)) {
-                    // Query to count faculty assigned to the same class as the logged-in student
-                    $faculty_by_class_query = "
-                        SELECT COUNT(DISTINCT faculty_list.id) AS total_faculty
-                        FROM faculty_list
-                        INNER JOIN subject_teacher 
-                        ON faculty_list.id = subject_teacher.faculty_id
-                        WHERE subject_teacher.faculty_id = ?";
-                    
-                    $stmt = $conn->prepare($faculty_by_class_query);
-                    $stmt->bind_param("i", $class_id);
+                // Fetch class_id of the logged-in student
+                $class_id_query = "SELECT class_id FROM student_list WHERE id = ?";
+                $stmt = $conn->prepare($class_id_query);
+                $stmt->bind_param("i", $_SESSION['login_id']);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                $class_row = $result->fetch_assoc();
+
+                $class_id = $class_row['class_id'] ?? null;
+
+                if ($class_id) {
+                    // Query to count distinct faculty_id with "pending" status for the class
+                    $pending_faculty_query = "
+                        SELECT COUNT(DISTINCT r.faculty_id) AS total_pending
+                        FROM restriction_list r
+                        INNER JOIN academic_list al ON al.id = r.academic_id AND al.status = 1
+                        LEFT JOIN evaluation_list el ON el.restriction_id = r.id 
+                            AND el.academic_id = ? 
+                            AND el.student_id = ?
+                        WHERE r.class_id = ? AND el.evaluation_id IS NULL
+                    ";
+
+                    $stmt = $conn->prepare($pending_faculty_query);
+                    $stmt->bind_param("iii", $_SESSION['academic']['id'], $_SESSION['login_id'], $class_id);
                     $stmt->execute();
                     $result = $stmt->get_result();
-                    $row = $result->fetch_assoc();
-                    
-                    echo $row['total_faculty']; // Total faculty for the same class
+                    $pending_row = $result->fetch_assoc();
+
+                    // Display the total pending faculty count
+                    echo $pending_row['total_pending'] ?? 0;
                 } else {
-                    echo 0; // If no class_id is found
+                    echo 0; // No class_id found
                 }
                 ?>
             </h3>
-            <p>Total Faculty for Your Class</p>
+            <p>Pending Teachers to Evaluate</p>
         </div>
         <div class="icon">
-            <i class="fa fa-user-friends"></i> <!-- Icon for faculty -->
+            <i class="fa fa-user-clock"></i> <!-- Icon for pending -->
         </div>
     </div>
 </div>
