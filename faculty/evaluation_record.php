@@ -18,7 +18,7 @@ $teacher_id = is_array($_SESSION['login_id']) ? $_SESSION['login_id']['id'] : $_
 
 // Fetch data for the filter dropdown
 $academic_data = $conn->query("
-    SELECT DISTINCT CONCAT(year, ' - ', semester) AS academic_term, id
+    SELECT DISTINCT CONCAT(year, ' - ', semester) AS academic_term, id, year, semester
     FROM academic_list
     ORDER BY year DESC, semester ASC
 ");
