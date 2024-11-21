@@ -86,37 +86,56 @@ $astat = array("Not Yet Started","On-going","Closed");
       </div>
     </div>
   </div>
-          <?php
-        // Retrieve faculty_id from the session
-        $faculty_id = $_SESSION['login_id'];
+  <?php
+      // Assuming $_SESSION['login_id'] holds the ID of the logged-in faculty
+      $faculty_id = $_SESSION['login_id'];
 
-        // Query to count students associated with the faculty
-        $total_students_query = "
-            SELECT COUNT(DISTINCT s.id) AS total_students
-            FROM class_list c
-            JOIN student_list s ON c.id = s.class_id
-            WHERE FIND_IN_SET(?, c.faculty_id) > 0"; // Use FIND_IN_SET to match faculty_id within a comma-separated list
+      // Step 1: Retrieve class_ids for the logged-in faculty
+      $class_id_query = "SELECT id AS class_id FROM class_list WHERE FIND_IN_SET(?, faculty_id)";
+      $stmt = $conn->prepare($class_id_query);
+      $stmt->bind_param("i", $faculty_id);
+      $stmt->execute();
+      $result = $stmt->get_result();
 
-        $stmt = $conn->prepare($total_students_query);
-        $stmt->bind_param("s", $faculty_id); // Bind as string since faculty_id is varchar
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $row = $result->fetch_assoc();
-        $total_students = $row['total_students'];
-        ?>
+      $class_ids = [];
+      while ($row = $result->fetch_assoc()) {
+          $class_ids[] = $row['class_id'];
+      }
 
-        <!-- Display the total students in a card -->
-        <div class="col-12 col-sm-6 col-md-4">
-          <div class="small-box bg-light shadow-sm border">
-            <div class="inner">
-              <h3><?php echo $total_students; ?></h3>
-              <p>Total Students for Your Classes</p>
-            </div>
-            <div class="icon">
-              <i class="fa fa-user-graduate"></i> <!-- Icon for class students -->
-            </div>
-          </div>
-        </div>
+      // Check if any class_ids were found
+      if (!empty($class_ids)) {
+          // Step 2: Count the total number of students in the retrieved classes
+          $placeholders = implode(',', array_fill(0, count($class_ids), '?')); // Create placeholders for IN clause
+          $total_students_query = "SELECT COUNT(*) AS total_students FROM student_list WHERE class_id IN ($placeholders)";
+          $stmt = $conn->prepare($total_students_query);
+
+          // Bind the class_ids dynamically
+          $types = str_repeat('i', count($class_ids)); // Generate the type string (all integers)
+          $stmt->bind_param($types, ...$class_ids);
+          $stmt->execute();
+          $result = $stmt->get_result();
+          $row = $result->fetch_assoc();
+
+          $total_students = $row['total_students'];
+      } else {
+          $total_students = 0; // In case no class_ids are found
+      }
+      ?>
+
+<!-- Display the total students in a card -->
+<div class="col-12 col-sm-6 col-md-4">
+  <div class="small-box bg-light shadow-sm border">
+    <div class="inner">
+      <h3><?php echo $total_students; ?></h3>
+      <p>Total Students in Your Classes</p>
+    </div>
+    <div class="icon">
+      <i class="fa fa-user-graduate"></i> <!-- Icon for class students -->
+    </div>
+  </div>
+</div>
+
+
 
   <div class="col-12 col-sm-6 col-md-4">
     <div class="small-box bg-light shadow-sm border">
