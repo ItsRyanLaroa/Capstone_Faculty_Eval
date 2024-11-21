@@ -20,20 +20,23 @@ function ordinal_suffix($num) {
         
         <!-- Academic Year and Semester Filter -->
         <div class="dataTables_length" id="evaluation-table_length">
-            <label for="academic-filter" >Year & Semester:</label>
-            <select id="academic-filter"  >
+            <label for="academic-filter">Year & Semester:</label>
+            <select id="academic-filter">
                 <option value="">All</option>
                 <?php 
-                // Fetch academic years and semesters dynamically
-                $academic_data = $conn->query("SELECT DISTINCT CONCAT(year, ' - ', semester) AS academic_term 
-                                                FROM academic_list 
-                                                ORDER BY year DESC, semester ASC");
+                // Fetch academic years and semesters dynamically with additional columns
+                $academic_data = $conn->query("
+                    SELECT DISTINCT CONCAT(year, ' - ', semester) AS academic_term, id, year, semester
+                    FROM academic_list
+                    ORDER BY year DESC, semester ASC
+                ");
                 while ($row = $academic_data->fetch_assoc()): ?>
-                    <option value="<?php echo $row['academic_term']; ?>"><?php echo $row['academic_term']; ?></option>
+                    <option value="<?php echo $row['academic_term']; ?>">
+                        <?php echo $row['academic_term']; ?>
+                    </option>
                 <?php endwhile; ?>
             </select>
         </div>
-
         <table class="table table-hover table-bordered styled-table" id="evaluation-table">
             <thead class="bg-gradient-secondary text-white">
                 <tr>
