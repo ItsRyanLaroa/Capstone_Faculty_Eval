@@ -518,7 +518,7 @@ tbody tr:hover {
 						<th class="text-center">#</th>
 						<th>Year</th>
 						<th>Semester</th>
-						<th>System Default</th>
+						<th>Active Academic Year</th>
 						<th>Evaluation Status</th>
 						<th>Action</th>
 					</tr>
@@ -535,9 +535,9 @@ tbody tr:hover {
 						<td><b><?php echo $row['semester'] ?></b></td>
 						<td class="text-center">
 							<?php if($row['is_default'] == 0): ?>
-								<button type="button" class="btn btn-secondary bg-gradient-secondary col-sm-4 btn-flat btn-sm px-1 py-0 make_default" data-id="<?php echo $row['id'] ?>">No</button>
+								<button type="button" class="btn btn-secondary bg-gradient-secondary col-sm-4 btn-flat btn-sm px-1 py-0 make_default" data-id="<?php echo $row['id'] ?>">Inactive</button>
 							<?php else: ?>
-								<button type="button" class="btn btn-primary bg-gradient-primary col-sm-4 btn-flat btn-sm px-1 py-0"><span style="color: white; font-weight: bold;">Yes</span></button>
+								<button type="button" class="btn btn-primary bg-gradient-primary col-sm-4 btn-flat btn-sm px-1 py-0"><span style="color: white; font-weight: bold;">Active</span></button>
 							<?php endif; ?>
 						</td>
 						<td class="text-center">
@@ -579,7 +579,7 @@ tbody tr:hover {
 		_conf("Are you sure to delete this academic?","delete_academic",[$(this).attr('data-id')])
 		})
 		$('.make_default').click(function(){
-		_conf("Are you sure to make this academic year as the system default?","make_default",[$(this).attr('data-id')])
+		_conf("Are you sure to make this academic year as active?","make_default",[$(this).attr('data-id')])
 		})
 		$('#list').dataTable()
 	})
@@ -608,7 +608,7 @@ tbody tr:hover {
 			data:{id:$id},
 			success:function(resp){
 				if(resp==1){
-					alert_toast("Dafaut Academic Year Updated",'success')
+					alert_toast("Active Academic Year Updated",'success')
 					setTimeout(function(){
 						location.reload()
 					},1500)
