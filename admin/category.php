@@ -119,7 +119,7 @@
                                 if($qry->num_rows > 0):
                             ?>
                             <div class="d-flex justify-content-between w-100">
-                                <label for=""><b>Criteria List</b></label>
+                                <label for=""><b>Category List</b></label>
                                 <button class="btn btn-sm btn-primary btn-flat bg-gradient-primary mx-1" form="order-criteria">Save Order</button>
                             </div>
                             <hr>
