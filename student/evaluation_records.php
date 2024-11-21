@@ -17,54 +17,67 @@ function ordinal_suffix($num) {
 <div class="col-lg-12">
     <div class="callout callout-info">
         <span style="color: #dc143c"><h3 class="text-center" style="font-weight: bold;">List of teachers you've evaluated</h3></span>
+        
+        <!-- Academic Year and Semester Filter -->
+        <div class="dataTables_length" id="evaluation-table_length">
+            <label for="academic-filter" >Year & Semester:</label>
+            <select id="academic-filter"  >
+                <option value="">All</option>
+                <?php 
+                // Fetch academic years and semesters dynamically
+                $academic_data = $conn->query("SELECT DISTINCT CONCAT(year, ' - ', semester) AS academic_term 
+                                                FROM academic_list 
+                                                ORDER BY year DESC, semester ASC");
+                while ($row = $academic_data->fetch_assoc()): ?>
+                    <option value="<?php echo $row['academic_term']; ?>"><?php echo $row['academic_term']; ?></option>
+                <?php endwhile; ?>
+            </select>
+        </div>
 
         <table class="table table-hover table-bordered styled-table" id="evaluation-table">
             <thead class="bg-gradient-secondary text-white">
                 <tr>
-           
                     <th>Faculty Name</th>
                     <th>Subject</th>
                     <th>Academic Year</th>
                     <th>Class</th>
                 </tr>
             </thead>
-              <tbody id="evaluation-table-body">
-            <?php 
+            <tbody id="evaluation-table-body">
+                <?php 
                 $student_id = $_SESSION['login_id'];
                 $academic_id = $_SESSION['academic']['id'];
 
                 $evaluations = $conn->query("SELECT DISTINCT 
-                    CONCAT(f.lastname, ', ', f.firstname) AS faculty_name,
-                    sl.subject,
-                    a.year AS academic_year,
-                    CONCAT(cl.level, ' - ', cl.section) AS class_details,
-                    cl.curriculum,
-                    r.faculty_id,
-                    f.avatar,
-                    f.lastname -- Include this column for ORDER BY compatibility
-                FROM evaluation_list r
-                LEFT JOIN subject_list sl ON r.subject_id = sl.id
-                LEFT JOIN faculty_list f ON r.faculty_id = f.id
-                LEFT JOIN class_list cl ON r.class_id = cl.id
-                LEFT JOIN academic_list a ON r.academic_id = a.id
-                WHERE r.student_id = '$student_id' AND r.academic_id = '$academic_id'
-                ORDER BY f.lastname ASC");
+                CONCAT(f.lastname, ', ', f.firstname) AS faculty_name,
+                sl.subject,
+                a.year AS academic_year,
+                a.semester AS academic_semester,
+                CONCAT(cl.level, ' - ', cl.section) AS class_details,
+                cl.curriculum,
+                r.faculty_id,
+                f.avatar,
+                f.lastname
+            FROM evaluation_list r
+            LEFT JOIN subject_list sl ON r.subject_id = sl.id
+            LEFT JOIN faculty_list f ON r.faculty_id = f.id
+            LEFT JOIN class_list cl ON r.class_id = cl.id
+            LEFT JOIN academic_list a ON r.academic_id = a.id
+            WHERE r.student_id = '$student_id'
+            ORDER BY f.lastname ASC");
 
                 while ($row = $evaluations->fetch_assoc()): 
                     $avatar = !empty($row['avatar']) ? 'assets/uploads/' . $row['avatar'] : 'assets/uploads/default_avatar.png';
                 ?>
-                <tr>
-                  
+                <tr data-academic-term="<?php echo $row['academic_year'] . ' - ' . $row['academic_semester']; ?>">
                     <td><?php echo ucwords($row['faculty_name']); ?></td>
                     <td><?php echo $row['subject']; ?></td>
-                    <td><?php echo $row['academic_year'] . ' ' . ordinal_suffix($_SESSION['academic']['semester']) . ' Semester'; ?></td>
+                    <td><?php echo $row['academic_year'] . ' ' . ordinal_suffix($row['academic_semester']) . ' Semester'; ?></td>
                     <td><?php echo $row['curriculum'] . ' (' . $row['class_details'] . ')'; ?></td>
                 </tr>
                 <?php endwhile; ?>
             </tbody>
         </table>
-
-     
     </div>
 </div>
 
@@ -198,6 +211,23 @@ function ordinal_suffix($num) {
 </style>
 
 <script>
+    $(document).ready(function() {
+        $('#evaluation-table').dataTable();
+
+        // Academic Year and Semester Filtering
+        $('#academic-filter').on('change', function() {
+            const selectedTerm = $(this).val();
+
+            $('#evaluation-table-body tr').each(function() {
+                const rowTerm = $(this).data('academic-term');
+                if (selectedTerm === "" || rowTerm == selectedTerm) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        });
+    });
    $(document).ready(function() {
         $('#evaluation-table').dataTable();
         
