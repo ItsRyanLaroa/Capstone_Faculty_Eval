@@ -1,4 +1,4 @@
-<?php
+<?php 
 include 'db_connect.php';
 
 function ordinal_suffix($num) {
@@ -12,99 +12,106 @@ function ordinal_suffix($num) {
     }
     return $num . 'th';
 }
-
-// Initialize academic ID from the session
-if (isset($_SESSION['academic']['id'])) {
-    $academic_id = $_SESSION['academic']['id'];
-} else {
-    die("Academic ID not set in session.");
-}
-
-// Get the faculty ID from the session
-$teacher_id = is_array($_SESSION['login_id']) ? $_SESSION['login_id']['id'] : $_SESSION['login_id'];
-
-$evaluations = $conn->query("
-    SELECT 
-        sl.subject,
-        CONCAT(st.firstname, ' ', st.lastname) AS student_name,
-        a.year AS academic_year,
-        CONCAT(cl.level, ' - ', cl.section) AS class_details,
-        cl.curriculum,
-        st.avatar
-    FROM evaluation_list r
-    LEFT JOIN subject_list sl ON r.subject_id = sl.id
-    LEFT JOIN student_list st ON r.student_id = st.id
-    LEFT JOIN class_list cl ON r.class_id = cl.id
-    LEFT JOIN academic_list a ON r.academic_id = a.id
-    WHERE r.faculty_id = '$teacher_id' AND r.academic_id = '$academic_id'
-    ORDER BY st.lastname ASC
-");
 ?>
 
 <div class="col-lg-12">
-    <div class="card card-outline card-success">
-        <div class="card-header">
-            <h3 class="text-center" style="font-weight: bold; color: #dc143c;">Student Who Evaluated</h3>
-            <div class="input-group mb-3" style="max-width: 20%; margin-left: auto;">
-               
-                <div class="input-group-append">
-                   
-                </div>
-            </div>
+    <div class="callout callout-info">
+        <span style="color: #dc143c"><h3 class="text-center" style="font-weight: bold;">List of teachers you've evaluated</h3></span>
+        
+        <!-- Academic Year and Semester Filter -->
+        <div class="dataTables_length" id="evaluation-table_length">
+            <label for="academic-filter" >Year & Semester:</label>
+            <select id="academic-filter"  >
+                <option value="">All</option>
+                <?php 
+                // Fetch academic years and semesters dynamically
+                $academic_data = $conn->query("SELECT DISTINCT CONCAT(year, ' - ', semester) AS academic_term 
+                                                FROM academic_list 
+                                                ORDER BY year DESC, semester ASC");
+                while ($row = $academic_data->fetch_assoc()): ?>
+                    <option value="<?php echo $row['academic_term']; ?>"><?php echo $row['academic_term']; ?></option>
+                <?php endwhile; ?>
+            </select>
         </div>
-        <div class="card-body">
-            <table class="table table-hover table-bordered styled-table" id="evaluation-table">
-                <thead>
-                    <tr>
-                        <th>Student Name</th>
-                        <th>Subject</th>
-                        <th>Academic Year</th>
-                        <th>Class</th>
-                    </tr>
-                </thead>
-                <tbody id="evaluation-table-body">
-                    <?php while ($row = $evaluations->fetch_assoc()): 
-                        $avatar = !empty($row['avatar']) ? 'assets/uploads/' . $row['avatar'] : 'assets/uploads/default_avatar.png';
-                    ?>
-                    <tr>
-                        <td><?php echo ucwords($row['student_name']); ?></td>
-                        <td><?php echo $row['subject']; ?></td>
-                        <td><?php echo $row['academic_year'] . ' ' . ordinal_suffix($_SESSION['academic']['semester']) . ' Semester'; ?></td>
-                        <td><?php echo $row['curriculum'] . ' (' . $row['class_details'] . ')'; ?></td>
-                    </tr>
-                    <?php endwhile; ?>
-                </tbody>
-            </table>
 
-        </div>
+        <table class="table table-hover table-bordered styled-table" id="evaluation-table">
+            <thead class="bg-gradient-secondary text-white">
+                <tr>
+                    <th>Faculty Name</th>
+                    <th>Subject</th>
+                    <th>Academic Year</th>
+                    <th>Class</th>
+                </tr>
+            </thead>
+            <tbody id="evaluation-table-body">
+                <?php 
+                $student_id = $_SESSION['login_id'];
+                $academic_id = $_SESSION['academic']['id'];
+
+                $evaluations = $conn->query("SELECT DISTINCT 
+                CONCAT(f.lastname, ', ', f.firstname) AS faculty_name,
+                sl.subject,
+                a.year AS academic_year,
+                a.semester AS academic_semester,
+                CONCAT(cl.level, ' - ', cl.section) AS class_details,
+                cl.curriculum,
+                r.faculty_id,
+                f.avatar,
+                f.lastname
+            FROM evaluation_list r
+            LEFT JOIN subject_list sl ON r.subject_id = sl.id
+            LEFT JOIN faculty_list f ON r.faculty_id = f.id
+            LEFT JOIN class_list cl ON r.class_id = cl.id
+            LEFT JOIN academic_list a ON r.academic_id = a.id
+            WHERE r.student_id = '$student_id'
+            ORDER BY f.lastname ASC");
+
+                while ($row = $evaluations->fetch_assoc()): 
+                    $avatar = !empty($row['avatar']) ? 'assets/uploads/' . $row['avatar'] : 'assets/uploads/default_avatar.png';
+                ?>
+                <tr data-academic-term="<?php echo $row['academic_year'] . ' - ' . $row['academic_semester']; ?>">
+                    <td><?php echo ucwords($row['faculty_name']); ?></td>
+                    <td><?php echo $row['subject']; ?></td>
+                    <td><?php echo $row['academic_year'] . ' ' . ordinal_suffix($row['academic_semester']) . ' Semester'; ?></td>
+                    <td><?php echo $row['curriculum'] . ' (' . $row['class_details'] . ')'; ?></td>
+                </tr>
+                <?php endwhile; ?>
+            </tbody>
+        </table>
     </div>
 </div>
+
 <style>
-    .card-header {
- 
- border: none;
+   
+    .bg-gradient-secondary {
+        background: #B31B1C linear-gradient(182deg, #b31b1b, #dc3545) repeat-x !important;
+        color: #fff;
+    }
+    .rounded-circle {
+        border-radius: 50%;
+    }
+    #pagination-controls button {
+        margin: 0 5px;
+        border: none;
+        padding: 5px 10px;
+        background-color: #007bff;
+        color: #fff;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+    #pagination-controls button.active {
+        background-color: #007bff;
+    }
+    #pagination-controls button:disabled {
+        background-color: #d6d6d6;
+        cursor: not-allowed;
+    }
+    .table-hover tbody tr:hover {
+        background-color: #f2f2f2;
+    }
 
-}
-    .styled-table tbody tr {
-        border-bottom: 1px solid #dddddd;
-    }
-    .styled-table tbody tr:nth-of-type(even) {
-        background-color: #f3f3f3;
-    }
-    .styled-table tbody tr:last-of-type {
-        border-bottom: 2px solid #009879;
-    }
-    thead th {
-        background-color: #9b0a1e;
-        color: #f3f3f3;
-        font-weight: bold;
-    }
-    tbody tr:hover {
-        background-color: #95d2ec;
-    }
-
-    .card-success.card-outline{
-        border-top: 3px solid #9b0a1e !important;
+    .callout.callout-info{
+        border-left-color: #9b0a1e;
     }
 
     @media (max-width: 540px) {
@@ -132,35 +139,6 @@ $evaluations = $conn->query("
 
     .ml-3 h5 {
         font-size: 20px;
-    }
-
-    .dataTables_length,
-    .dataTables_filter {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        font-size: 0.75rem;
-        margin-bottom: 0.75rem;
-    }
-
-    .dataTables_length select,
-    .dataTables_filter input {
-        width: 100%;
-    }
-
-    .dataTables_length label,
-    .dataTables_filter label {
-        font-size: 0.75rem;
-    }
-
-   
-    .dataTables_paginate {
-        font-size: 0.75rem;
-    }
-
-    .dataTables_paginate .paginate_button {
-        padding: 0.25rem 0.5rem;
-        font-size: 0.75rem;
     }
 }
 
@@ -196,35 +174,6 @@ $evaluations = $conn->query("
     .ml-3 h5 {
         font-size: 18px;
     }
-
-    .dataTables_length,
-    .dataTables_filter {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        font-size: 0.75rem;
-        margin-bottom: 0.75rem;
-    }
-
-    .dataTables_length select,
-    .dataTables_filter input {
-        width: 100%;
-    }
-
-    .dataTables_length label,
-    .dataTables_filter label {
-        font-size: 0.75rem;
-    }
-
-   
-    .dataTables_paginate {
-        font-size: 0.75rem;
-    }
-
-    .dataTables_paginate .paginate_button {
-        padding: 0.25rem 0.5rem;
-        font-size: 0.75rem;
-    }
 }
 
 @media (max-width: 414px) {
@@ -258,41 +207,28 @@ $evaluations = $conn->query("
     .ml-3 h5 {
         font-size: 16px;
     }
-
-    .dataTables_length,
-    .dataTables_filter {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        font-size: 0.75rem;
-        margin-bottom: 0.75rem;
-    }
-
-    .dataTables_length select,
-    .dataTables_filter input {
-        width: 100%;
-    }
-
-    .dataTables_length label,
-    .dataTables_filter label {
-        font-size: 0.75rem;
-    }
-
-   
-    .dataTables_paginate {
-        font-size: 0.75rem;
-    }
-
-    .dataTables_paginate .paginate_button {
-        padding: 0.25rem 0.5rem;
-        font-size: 0.75rem;
-    }
 }
 </style>
 
-
 <script>
     $(document).ready(function() {
+        $('#evaluation-table').dataTable();
+
+        // Academic Year and Semester Filtering
+        $('#academic-filter').on('change', function() {
+            const selectedTerm = $(this).val();
+
+            $('#evaluation-table-body tr').each(function() {
+                const rowTerm = $(this).data('academic-term');
+                if (selectedTerm === "" || rowTerm == selectedTerm) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        });
+    });
+   $(document).ready(function() {
         $('#evaluation-table').dataTable();
         
         let rowsPerPage = 5;
