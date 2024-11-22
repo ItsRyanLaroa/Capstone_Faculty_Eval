@@ -97,7 +97,9 @@ thead th {
     background-color: transparent;
     border: none;
 }
-
+.btn-group{
+	float: left;
+}
 .btn-danger {
     color: red;
 	background-color: transparent;
