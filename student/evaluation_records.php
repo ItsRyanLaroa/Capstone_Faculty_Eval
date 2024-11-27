@@ -44,6 +44,7 @@ function ordinal_suffix($num) {
                     <th>Subject</th>
                     <th>Academic Year</th>
                     <th>Class</th>
+                    <th>Status</th>
                 </tr>
             </thead>
             <tbody id="evaluation-table-body">
@@ -77,6 +78,7 @@ function ordinal_suffix($num) {
                     <td><?php echo $row['subject']; ?></td>
                     <td><?php echo $row['academic_year'] . ' ' . ordinal_suffix($row['academic_semester']) . ' Semester'; ?></td>
                     <td><?php echo $row['curriculum'] . ' (' . $row['class_details'] . ')'; ?></td>
+                    <td><span class="badge badge-success">Completed</span></td>
                 </tr>
                 <?php endwhile; ?>
             </tbody>
@@ -85,7 +87,14 @@ function ordinal_suffix($num) {
 </div>
 
 <style>
-   
+   .badge-success {
+    background-color: #ffc107;
+    color: #000;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+}
+
     .bg-gradient-secondary {
         background: #B31B1C linear-gradient(182deg, #b31b1b, #dc3545) repeat-x !important;
         color: #fff;
