@@ -19,7 +19,7 @@ function ordinal_suffix($num) {
         <span style="color: #dc143c"><h3 class="text-center" style="font-weight: bold;">List of teachers you've evaluated</h3></span>
         
         <!-- Academic Year and Semester Filter -->
-        <div class="dataTables_length" id="evaluation-table_length">
+        <div class="dataTables" id="evaluation-table_length">
             <label for="academic-filter">Year & Semester:</label>
             <select id="academic-filter">
                 <option value="">All</option>
@@ -93,6 +93,7 @@ function ordinal_suffix($num) {
     padding: 5px 10px;
     border-radius: 5px;
     font-size: 12px;
+    max-width: 80px;
 }
 
     .bg-gradient-secondary {
@@ -153,7 +154,13 @@ function ordinal_suffix($num) {
         font-size: 20px;
     }
 }
+.dataTables_length{
+    float: left;
+   
+    
+}
 
+   
 
 @media (max-width: 430px) {
     .callout.callout-info {
