@@ -35,13 +35,30 @@ if (isset($_FILES['excel_file'])) {
             // Set the status to 'active'
             $status = 'active';
 
+            // School ID pattern: SCC-XX-XXXXXXXX
+            $schoolIdPattern = '/^[A-Za-z]{3}-\d{2}-\d{8}$/';
+
             // Loop through each row of the spreadsheet
             foreach ($sheetData as $row) {
                 $school_id = $row['A']; // Adjust column index as per your Excel file
-                $firstname = $row['B'];
-                $lastname = $row['C'];
+                $firstname = trim($row['B']); // Trim spaces from firstname
+                $lastname = trim($row['C']); // Trim spaces from lastname
                 $email = $row['D']; // Assuming column D holds the email
                 $password = $row['E']; // Assuming column E holds the plain-text password
+
+                // Validate the school ID format
+                if (!preg_match($schoolIdPattern, $school_id)) {
+                    // Log an error and skip this record if the school ID doesn't match the expected format
+                    error_log("Invalid school ID format: " . $school_id);
+                    continue;
+                }
+
+                // Validate that the names only contain letters and spaces
+                if (!preg_match("/^[A-Za-z ]*$/", $firstname) || !preg_match("/^[A-Za-z ]*$/", $lastname)) {
+                    // Log an error and skip this record if the names contain invalid characters
+                    error_log("Invalid characters in name: " . $firstname . " " . $lastname);
+                    continue;
+                }
 
                 // Hash the password using MD5
                 $hashedPassword = md5($password);
