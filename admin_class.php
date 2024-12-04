@@ -842,11 +842,15 @@ function login(){
 			}
 		}
 	
-		// Check for duplicates for the same faculty ID
-		$check = $this->db->query("SELECT * FROM restriction_list WHERE class_id = '$class_id' AND subject_id = '$subject_id' AND faculty_id = '{$faculty_id}'" . (!empty($id) ? " AND id != {$id}" : ''))->num_rows;
+		// Check for duplicates for the same class_id, subject_id, and faculty_id
+		$check = $this->db->query("SELECT * FROM restriction_list 
+								   WHERE class_id = '$class_id' 
+								   AND subject_id = '$subject_id' 
+								   AND faculty_id = '$faculty_id'" 
+								   . (!empty($id) ? " AND id != {$id}" : ''))->num_rows;
 	
 		if ($check > 0) {
-			return 3; // Duplicate class_id and subject_id combination found for the same faculty ID
+			return 3; // Duplicate combination found for the same faculty_id
 		}
 	
 		if (empty($id)) {
@@ -866,6 +870,7 @@ function login(){
 		}
 		return 0; // Error occurred
 	}
+	
 	
 	
 // In admin_class.php
@@ -1132,7 +1137,58 @@ function save_evaluation() {
 		return json_encode($data);
 	}
 	
+	function fetch_result(){
+	extract($_POST);
+		$data = array();
 	
+		// Fetch evaluations with status 'active'
+		$get = $this->db->query("SELECT * FROM evaluation_answers 
+			WHERE evaluation_id IN 
+				(SELECT evaluation_id FROM evaluation_list 
+					WHERE academic_id = {$_SESSION['academic']['id']} 
+					AND faculty_id = $faculty_id 
+					AND subject_id = $subject_id 
+					AND class_id = $class_id 
+						AND status = 'active'");
+	
+		// Count active evaluations
+		$answered = $this->db->query("SELECT * FROM evaluation_list 
+			WHERE academic_id = {$_SESSION['academic']['id']} 
+			AND faculty_id = $faculty_id 
+			AND subject_id = $subject_id 
+			AND class_id = $class_id 
+				AND status = 'active'");
+	
+		$rate = array();
+		$totalRating = 0;
+		while ($row = $get->fetch_assoc()) {
+			$totalRating += $row['rate']; // Sum all ratings across questions
+			if (!isset($rate[$row['question_id']][$row['rate']])) {
+				$rate[$row['question_id']][$row['rate']] = 0;
+			}
+			$rate[$row['question_id']][$row['rate']] += 5;
+		}
+	
+		$ta = $answered->num_rows; // Total answered evaluations
+		$r = array();
+	
+		foreach ($rate as $qk => $qv) {
+			foreach ($qv as $rk => $rv) {
+				$r[$qk][$rk] = ($rate[$qk][$rk] / $ta) * 1;
+			}
+		}
+	
+		// Calculate overall average rating
+		$totalQuestions = 20; // Ensure this is accurate or dynamically fetched
+		$averageRating = ($ta > 0 && $totalQuestions > 0) ? number_format($totalRating / ($totalQuestions * $ta), 2) : 0;
+	
+		$data['tse'] = $ta;
+		$data['totalRating'] = $totalRating;
+		$data['averageRating'] = $averageRating;
+		$data['data'] = $r;
+	
+		return json_encode($data);
+	}
 	
 	
 	public function toggle_status($status) {
