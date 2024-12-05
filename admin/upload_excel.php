@@ -1,9 +1,4 @@
 <?php
-ini_set('display_errors', 0);  // Disable error display
-error_reporting(E_ALL);        // Log errors
-
-ob_start(); // Start output buffering
-
 require '../vendor/autoload.php'; // Adjust the path as necessary for PhpSpreadsheet
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -40,16 +35,16 @@ if (isset($_FILES['excel_file'])) {
             // Set the status to 'active'
             $status = 'active';
 
-            // School ID pattern: SCC-XX-XXXXXXXX
-            $schoolIdPattern = '/^[A-Za-z]{3}-\d{2}-\d{8}$/';
+            // Allow flexible number of digits for the school ID
+            $schoolIdPattern = '/^[A-Za-z]{3}-\d{2}-\d+$/';
 
             // Loop through each row of the spreadsheet
             foreach ($sheetData as $row) {
-                $school_id = isset($row['A']) ? $row['A'] : '';  // Ensure it's not null
-                $firstname = isset($row['B']) ? trim($row['B']) : '';  // Ensure it's not null
-                $lastname = isset($row['C']) ? trim($row['C']) : '';    // Ensure it's not null
-                $email = isset($row['D']) ? $row['D'] : '';  // Ensure email is set
-                $password = isset($row['E']) ? $row['E'] : '';  // Ensure password is set
+                $school_id = $row['A']; // Adjust column index as per your Excel file
+                $firstname = trim($row['B']); // Trim spaces from firstname
+                $lastname = trim($row['C']); // Trim spaces from lastname
+                $email = $row['D']; // Assuming column D holds the email
+                $password = $row['E']; // Assuming column E holds the plain-text password
 
                 // Validate the school ID format
                 if (!preg_match($schoolIdPattern, $school_id)) {
@@ -58,23 +53,17 @@ if (isset($_FILES['excel_file'])) {
                     continue;
                 }
 
-                // Validate that the names only contain letters and spaces
-                if (!empty($firstname) && !preg_match("/^[A-Za-z ]*$/", $firstname)) {
-                    // Log an error and skip this record if the firstname contains invalid characters
-                    error_log("Invalid characters in firstname: " . $firstname);
-                    continue;
-                }
-
-                if (!empty($lastname) && !preg_match("/^[A-Za-z ]*$/", $lastname)) {
-                    // Log an error and skip this record if the lastname contains invalid characters
-                    error_log("Invalid characters in lastname: " . $lastname);
+                // Validate that the names contain only letters, spaces, apostrophes, hyphens, and special characters
+                if (!preg_match("/^[\p{L} '-]+$/u", $firstname) || !preg_match("/^[\p{L} '-]+$/u", $lastname)) {
+                    // Log an error and skip this record if the names contain invalid characters
+                    error_log("Invalid characters in name: " . $firstname . " " . $lastname);
                     continue;
                 }
 
                 // Hash the password using MD5
                 $hashedPassword = md5($password);
 
-                // Check if the student already exists
+                // Check if the student already exists by school ID
                 $stmtCheck->bind_param("s", $school_id);
                 $stmtCheck->execute();
                 $stmtCheck->bind_result($count);
@@ -124,6 +113,4 @@ if (isset($_FILES['excel_file'])) {
     header('Location: ../index.php?page=view_class&error=file_missing');
     exit;
 }
-
-ob_end_flush(); // End output buffering
 ?>
